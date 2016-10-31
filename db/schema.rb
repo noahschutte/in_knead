@@ -10,14 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031031335) do
+ActiveRecord::Schema.define(version: 20161031032341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "users", force: :cascade do |t|
+  create_table "anons", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "requests", force: :cascade do |t|
+    t.integer  "creator_id", null: false
+    t.string   "first_name", null: false
+    t.integer  "pizzas",     null: false
+    t.string   "vendor",     null: false
+    t.string   "video",      null: false
+    t.integer  "donor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_requests_on_creator_id", using: :btree
+  end
+
+  create_table "thank_yous", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.bigint   "fb_userID",                 null: false
+    t.string   "first_name",                null: false
+    t.string   "signup_email",              null: false
+    t.string   "current_email",             null: false
+    t.integer  "rating",        default: 0
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
 end
