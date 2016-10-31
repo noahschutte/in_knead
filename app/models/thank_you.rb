@@ -1,0 +1,2 @@
+class ThankYou < ApplicationRecord
+end

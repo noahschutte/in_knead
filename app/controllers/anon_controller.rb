@@ -1,0 +1,2 @@
+class AnonController < ApplicationController
+end
