@@ -1,0 +1,2 @@
+class Anon < ApplicationRecord
+end

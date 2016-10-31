@@ -1,0 +1,37 @@
+class Request < ApplicationRecord
+
+    validates_presence_of :creator, :first_name, :pizzas, :vendor, :video
+
+    belongs_to :creator, class_name: "User", foreign_key: :creator_id
+
+  def self.open_requests
+    # Request.where("created_at > ?", DateTime.now - 4.hours).order('created_at ASC')
+
+    Request.order('created_at ASC').map { |request|
+      minutes = ((Time.now() - request.created_at) / 60).round
+      {
+        id: request.id,
+        creator_id: request.creator_id,
+        first_name: request.first_name,
+        pizzas: request.pizzas,
+        vendor: request.vendor,
+        video: get_url(request.video),
+        donor_id: request.donor_id,
+        minutes: minutes
+      }
+    }
+  end
+
+  def self.total_pizzas_donated
+    Request.where.not(donor_id: nil).map{|request| request.pizzas}.reduce(:+)
+  end
+
+  def self.active_donation(user)
+    Request.where(donor_id: user.id).where("updated_at > ?", DateTime.now - 30.minutes)
+  end
+
+  def self.get_url(video)
+    @asset = S3_BUCKET.object("uploads/#{video}")
+    @url = @asset.presigned_url(:get)
+  end
+end
