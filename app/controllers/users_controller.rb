@@ -6,8 +6,17 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(request[:id])
-    render :json => { email: @user.current_email }
+    @pizzas = Request.total_pizzas_donated
+    @donated_pizzas = @pizzas ? @pizzas : 0
+    @user_id = request[:id]
+    @user_history = Request.user_history(@user_id)
+    @asset = S3_BUCKET.object('iwantpizza.mp4')
+    @url = @asset.presigned_url(:get)
+    if @user_history.any?
+      render :json => { totalDonatedPizzas: @donated_pizzas, userHistory: @user_history, url: @url }
+    else
+      render :json => { totalDonatedPizzas: @donated_pizzas,  errorMessage: 'No current requests.', url: @url }
+    end
   end
 
   def create
@@ -17,7 +26,14 @@ class UsersController < ApplicationController
     @user = User.find_by(fb_userID: @fb_userID)
     if @user && User.recent_donation(@user.id)
       @active_donation = Request.active_donation(@user)
-      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation[0] }
+
+      p "@active_donation"
+      p @active_donation[0]
+
+      @anon = User.find(@active_donation[0].creator_id)
+      @anon_email = @anon.current_email
+
+      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation[0], anonEmail: @anon_email }
     elsif @user
       render :json => { user: @user, email: @user.current_email, activeDonation: nil }
     else
