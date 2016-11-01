@@ -49,7 +49,11 @@ class RequestsController < ApplicationController
       @requests = Request.open_requests
       @pizzas = Request.total_pizzas_donated
       @active_donation = Request.active_donation(@donor)
-      render :json => { totalDonatedPizzas: @pizzas, requests: @requests, activeDonation: @active_donation }
+      
+      @anon = User.find(@request.creator_id)
+      @anon_email = @anon.current_email
+
+      render :json => { totalDonatedPizzas: @pizzas, requests: @requests, activeDonation: @active_donation, anonEmail: @anon_email }
     else
       render :json => { errorMessage: "Cannot donate at this time." }
     end
