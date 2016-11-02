@@ -79,7 +79,11 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
-  database: in_knead_production
-  username: in_knead
+  database: inknead
+  username: noahschutte
   password: <%= ENV['IN_KNEAD_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: 10
+  host: inknead.cgzkfiqx4r3d.us-east-1.rds.amazonaws.com
+  port: 5432
