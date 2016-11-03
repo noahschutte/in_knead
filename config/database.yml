@@ -86,4 +86,3 @@ production:
   encoding: unicode
   pool: 10
   host: inknead.cgzkfiqx4r3d.us-east-1.rds.amazonaws.com
-  port: 5432
