@@ -27,13 +27,10 @@ class UsersController < ApplicationController
     if @user && User.recent_donation(@user.id)
       @active_donation = Request.active_donation(@user)
 
-      p "@active_donation"
-      p @active_donation[0]
-
-      @anon = User.find(@active_donation[0].creator_id)
+      @anon = User.find(@active_donation.creator_id)
       @anon_email = @anon.current_email
 
-      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation[0], anonEmail: @anon_email }
+      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email }
     elsif @user
       render :json => { user: @user, email: @user.current_email, activeDonation: nil }
     else
