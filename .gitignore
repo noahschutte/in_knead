@@ -21,3 +21,6 @@
 
 # Gemfile.lock
 /Gemfile.lock
+
+# Dump Files
+*.sql
