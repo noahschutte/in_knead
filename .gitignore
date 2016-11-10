@@ -20,7 +20,7 @@
 /.env
 
 # Gemfile.lock
-/Gemfile.lock
+#/Gemfile.lock
 
 # Dump Files
 *.sql
