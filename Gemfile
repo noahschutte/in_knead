@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'io-console'
+# gem 'io-console'
 
 # ruby '~> 2.3.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
