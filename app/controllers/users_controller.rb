@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
       render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email }
     elsif @user
-      render :json => { user: @user, email: @user.current_email, activeDonation: nil }
+      render :json => { user: @user, email: @user.current_email, activeDonation: nil, anonEmail: nil }
     else
       @user = User.create(fb_userID: @fb_userID, first_name: @first_name, signup_email: @email, current_email: @email)
       render :json => { user: @user, email: @user.current_email, activeDonation: nil }
