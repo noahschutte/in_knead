@@ -43,13 +43,13 @@ class RequestsController < ApplicationController
   def update
     @donor = User.find(params[:userID])
     @request = Request.find(params[:id])
-    if Request.active_donation(@donor).any?
+    if Request.active_donation(@donor)
       render :json => { errorMessage: "You have recently made a donation." }
     elsif @request.update(donor_id: @donor.id)
       @requests = Request.open_requests
       @pizzas = Request.total_pizzas_donated
       @active_donation = Request.active_donation(@donor)
-      
+
       @anon = User.find(@request.creator_id)
       @anon_email = @anon.current_email
 
