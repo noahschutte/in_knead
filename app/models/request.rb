@@ -58,7 +58,7 @@ class Request < ApplicationRecord
   end
 
   def self.active_donation(user)
-    Request.where(donor_id: user.id).where("updated_at > ?", DateTime.now - 30.minutes)[0]
+    Request.where(donor_id: user.id).where("updated_at > ?", DateTime.now - 1.days)[0]
   end
 
   def self.get_url(video)
