@@ -1,6 +1,6 @@
 class Request < ApplicationRecord
 
-    validates_presence_of :creator, :first_name, :pizzas, :vendor, :video
+    validates_presence_of :creator, :pizzas, :vendor, :video
     belongs_to :creator, class_name: "User", foreign_key: :creator_id
 
   def self.open_requests
@@ -11,7 +11,6 @@ class Request < ApplicationRecord
       {
         id: request.id,
         creator_id: request.creator_id,
-        first_name: request.first_name,
         pizzas: request.pizzas,
         vendor: request.vendor,
         video: get_url(request.video),
@@ -27,7 +26,6 @@ class Request < ApplicationRecord
       {
         id: request.id,
         creator_id: request.creator_id,
-        first_name: request.first_name,
         pizzas: request.pizzas,
         vendor: request.vendor,
         video: get_url(request.video),
@@ -43,7 +41,6 @@ class Request < ApplicationRecord
       {
         id: request.id,
         creator_id: request.creator_id,
-        first_name: request.first_name,
         pizzas: request.pizzas,
         vendor: request.vendor,
         video: get_url(request.video),

@@ -21,7 +21,7 @@ class RequestsController < ApplicationController
 
   def create
     @user = User.find(request[:userID])
-    @request = Request.new(creator: @user, first_name: @user.first_name, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
+    @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
     if User.recent_successful_request(@user.id)
       render :json => { errorMessage: "You must wait 14 days after receiving a donation." }
     elsif User.recent_request(@user.id)
@@ -30,13 +30,7 @@ class RequestsController < ApplicationController
       @pizzas = Request.total_pizzas_donated
       @donated_pizzas = @pizzas ? @pizzas : 0
       @requests = Request.open_requests
-
-      # Prepare Signed Request EXPOSES SECRET ACCESS KEYS
-      # @signed_request = set_s3_direct_post(@request.video)
-
-      # Prepare presigned_url as a put
       @signed_request = set_presigned_put_url(@request.video)
-
       render :json => { requests: @requests, totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request }
     else
       render :json => { errorMessage: "Request was not created." }
@@ -75,32 +69,10 @@ class RequestsController < ApplicationController
   end
 
   private
-    # def set_s3_direct_post(key)
-    #   S3_BUCKET.presigned_post(key: key, success_action_status: '201', acl: 'public-read')
-    # end
-
     def set_presigned_put_url(object_name)
-      # p "set_presigned_put_url start"
-      # p "object_name"
-      # p object_name
-
       @s3 = Aws::S3::Resource.new
-      # p "@s3"
-      # p @s3
-
       @object = @s3.bucket(ENV['S3_BUCKET']).object("uploads/#{object_name}")
-      # p "@object"
-      # p @object
-
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      # p "@put_url"
-      # p @put_url
-      #=> "https://bucket-name.s3.amazonaws.com/files/hello.text?X-Amz-..."
-
-      # p "object.public_url"
-      # p @object.public_url
-      #=> "https://bucket-name.s3.amazonaws.com/files/hello.text"
-
       return @put_url
     end
 end
