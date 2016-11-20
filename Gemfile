@@ -9,8 +9,6 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
-# Shim to load environment variables from .env into ENV in development.
-gem 'dotenv-rails', :groups => [:development, :test]
 
 gem 'aws-sdk', '~> 2'
 gem 'aws-sdk-rails'
