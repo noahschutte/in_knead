@@ -16,6 +16,9 @@
 # Ignore Byebug command history file.
 .byebug_history
 
+# Ignore dotenv gem .env file
+/.env
+
 # Gemfile.lock
 #/Gemfile.lock
 
