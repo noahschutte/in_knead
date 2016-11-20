@@ -22,7 +22,6 @@ class UsersController < ApplicationController
   def create
     @email = request[:userInfo][:email]
     @fb_userID = request[:userInfo][:id]
-    @first_name = request[:userInfo][:first_name]
     @user = User.find_by(fb_userID: @fb_userID)
     if @user && User.recent_donation(@user.id)
       @active_donation = Request.active_donation(@user)
@@ -34,7 +33,7 @@ class UsersController < ApplicationController
     elsif @user
       render :json => { user: @user, email: @user.current_email, activeDonation: nil, anonEmail: nil }
     else
-      @user = User.create(fb_userID: @fb_userID, first_name: @first_name, signup_email: @email, current_email: @email)
+      @user = User.create(fb_userID: @fb_userID, signup_email: @email, current_email: @email)
       render :json => { user: @user, email: @user.current_email, activeDonation: nil }
     end
   end
