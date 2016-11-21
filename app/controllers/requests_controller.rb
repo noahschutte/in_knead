@@ -22,9 +22,11 @@ class RequestsController < ApplicationController
   def create
     @user = User.find(request[:userID])
     @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
-    if User.recent_successful_request(@user.id)
+    @recent_successful_request = User.recent_successful_request(@user.id)
+    @recent_request = User.recent_request(@user.id)
+    if @recent_successful_request
       render :json => { errorMessage: "You must wait 14 days after receiving a donation." }
-    elsif User.recent_request(@user.id)
+    elsif @recent_request
       render :json => { errorMessage: "You can only make a request once every 24 hours." }
     elsif @request.save
       @pizzas = Request.total_pizzas_donated
@@ -38,9 +40,11 @@ class RequestsController < ApplicationController
   end
 
   def update
-    @donor = User.find(params[:userID])
     @request = Request.find(params[:id])
-    if Request.active_donation(@donor)
+    @donor = User.find(params[:userID])
+    if params[:receivedDonation] && @request.update(received: 1)
+      render :json => { status: "success" }
+    elsif Request.active_donation(@donor)
       render :json => { errorMessage: "You have recently made a donation." }
     elsif @request.update(donor_id: @donor.id)
       @requests = Request.open_requests
