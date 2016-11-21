@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     if @user_history.any?
       render :json => { totalDonatedPizzas: @donated_pizzas, userHistory: @user_history, url: @url }
     else
-      render :json => { totalDonatedPizzas: @donated_pizzas,  errorMessage: 'No current requests.', url: @url }
+      render :json => { totalDonatedPizzas: @donated_pizzas,  errorMessage: 'You have no activity.', url: @url }
     end
   end
 
@@ -23,18 +23,30 @@ class UsersController < ApplicationController
     @email = request[:userInfo][:email]
     @fb_userID = request[:userInfo][:id]
     @user = User.find_by(fb_userID: @fb_userID)
-    if @user && User.recent_donation(@user.id)
+    if @user && User.recent_successful_request(@user.id) && User.recent_donation(@user.id)
+      @active_donation = Request.active_donation(@user)
+      @anon = User.find(@active_donation.creator_id)
+      @anon_email = @anon.current_email
+
+      @recent_successful_request = User.recent_successful_request(@user.id)
+
+      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email, recentSuccessfulRequest: @recent_successful_request }
+    elsif @user && User.recent_successful_request(@user.id)
+      @recent_successful_request = User.recent_successful_request(@user.id)
+
+      render :json => { user: @user, email: @user.current_email, activeDonation: nil, recentSuccessfulRequest: @recent_successful_request }
+    elsif @user && User.recent_donation(@user.id)
       @active_donation = Request.active_donation(@user)
 
       @anon = User.find(@active_donation.creator_id)
       @anon_email = @anon.current_email
 
-      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email }
+      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email, recentSuccessfulRequest: nil }
     elsif @user
-      render :json => { user: @user, email: @user.current_email, activeDonation: nil, anonEmail: nil }
+      render :json => { user: @user, email: @user.current_email, activeDonation: nil, anonEmail: nil, recentSuccessfulRequest: nil }
     else
       @user = User.create(fb_userID: @fb_userID, signup_email: @email, current_email: @email)
-      render :json => { user: @user, email: @user.current_email, activeDonation: nil }
+      render :json => { user: @user, email: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil }
     end
   end
 
