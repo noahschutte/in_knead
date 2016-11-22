@@ -7,6 +7,7 @@ class CreateRequests < ActiveRecord::Migration[5.0]
       t.string :video, null: false
       t.integer :donor_id
       t.integer :received, default: 0
+      t.integer :reports, default: 0
 
       t.timestamps null: false
     end

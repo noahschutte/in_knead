@@ -1,7 +1,9 @@
 class Request < ApplicationRecord
 
     validates_presence_of :creator, :pizzas, :vendor, :video
+
     belongs_to :creator, class_name: "User", foreign_key: :creator_id
+    has_one :thank_you, class_name: "ThankYou", foreign_key: :request_id
 
   def self.open_requests
     # Request.where("created_at > ?", DateTime.now - 24.hours).order('created_at DESC')
@@ -15,7 +17,10 @@ class Request < ApplicationRecord
         vendor: request.vendor,
         video: get_url(request.video),
         donor_id: request.donor_id,
-        minutes: minutes
+        minutes: minutes,
+        received: request.received,
+        reports: request.reports,
+        created_at: request.created_at
       }
     }
   end
@@ -30,7 +35,10 @@ class Request < ApplicationRecord
         vendor: request.vendor,
         video: get_url(request.video),
         donor_id: request.donor_id,
-        minutes: minutes
+        minutes: minutes,
+        received: request.received,
+        reports: request.reports,
+        created_at: request.created_at
       }
     }
   end
@@ -45,7 +53,10 @@ class Request < ApplicationRecord
         vendor: request.vendor,
         video: get_url(request.video),
         donor_id: request.donor_id,
-        minutes: minutes
+        minutes: minutes,
+        received: request.received,
+        reports: request.reports,
+        created_at: request.created_at
       }
     }
   end
@@ -58,8 +69,9 @@ class Request < ApplicationRecord
     Request.where(donor_id: user.id).where("updated_at > ?", DateTime.now - 30.minutes)[0]
   end
 
-  def self.get_url(video)
-    @asset = S3_BUCKET.object("uploads/#{video}")
-    @url = @asset.presigned_url(:get)
-  end
+  private
+    def self.get_url(video)
+      @asset = S3_BUCKET.object("uploads/#{video}")
+      @url = @asset.presigned_url(:get)
+    end
 end

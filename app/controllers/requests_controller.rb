@@ -5,10 +5,11 @@ class RequestsController < ApplicationController
     @pizzas = Request.total_pizzas_donated
     @donated_pizzas = @pizzas ? @pizzas : 0
     @requests = Request.open_requests
+    @thank_yous = ThankYou.activity
     @asset = S3_BUCKET.object('iwantpizza.mp4')
     @url = @asset.presigned_url(:get)
-    if @requests.any?
-      render :json => { totalDonatedPizzas: @donated_pizzas, requests: @requests, url: @url }
+    if @requests.any? || @thank_yous.any?
+      render :json => { totalDonatedPizzas: @donated_pizzas, requests: @requests, thankYous: @thank_yous, url: @url }
     else
       render :json => { totalDonatedPizzas: @donated_pizzas,  errorMessage: 'No current requests.', url: @url }
     end
@@ -32,8 +33,9 @@ class RequestsController < ApplicationController
       @pizzas = Request.total_pizzas_donated
       @donated_pizzas = @pizzas ? @pizzas : 0
       @requests = Request.open_requests
+      @thank_yous = ThankYou.activity
       @signed_request = set_presigned_put_url(@request.video)
-      render :json => { requests: @requests, totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request }
+      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request }
     else
       render :json => { errorMessage: "Request was not created." }
     end
@@ -41,20 +43,24 @@ class RequestsController < ApplicationController
 
   def update
     @request = Request.find(params[:id])
-    @donor = User.find(params[:userID])
+    @user = User.find(params[:userID])
     if params[:receivedDonation] && @request.update(received: 1)
-      render :json => { status: "success" }
-    elsif Request.active_donation(@donor)
+      @recent_successful_request = User.recent_successful_request(@user.id)
+      render :json => { recentSuccessfulRequest: @recent_successful_request }
+    elsif Request.active_donation(@user)
       render :json => { errorMessage: "You have recently made a donation." }
-    elsif @request.update(donor_id: @donor.id)
+    elsif @request.donor_id != nil
+      render :json => { errorMessage: "This request has already received a donation." }
+    elsif @request.update(donor_id: @user.id)
       @requests = Request.open_requests
+      @thank_yous = ThankYou.activity
       @pizzas = Request.total_pizzas_donated
-      @active_donation = Request.active_donation(@donor)
+      @active_donation = Request.active_donation(@user)
 
       @anon = User.find(@request.creator_id)
       @anon_email = @anon.current_email
 
-      render :json => { totalDonatedPizzas: @pizzas, requests: @requests, activeDonation: @active_donation, anonEmail: @anon_email }
+      render :json => { totalDonatedPizzas: @pizzas, requests: @requests, thankYous: @thank_yous, activeDonation: @active_donation, anonEmail: @anon_email }
     else
       render :json => { errorMessage: "Cannot donate at this time." }
     end
@@ -66,7 +72,8 @@ class RequestsController < ApplicationController
       @pizzas = Request.total_pizzas_donated
       @donated_pizzas = @pizzas ? @pizzas : 0
       @requests = Request.open_requests
-      render :json => { requests: @requests, totalDonatedPizzas: @donated_pizzas, errorMessage: "Request could not be created." }
+      @thank_yous = ThankYou.activity
+      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, errorMessage: "Request could not be created." }
     else
       render :json => { errorMessage: "Video could not be uploaded, but request could not be deleted." }
     end
