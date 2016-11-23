@@ -9,54 +9,60 @@ class Request < ApplicationRecord
     # Request.where("created_at > ?", DateTime.now - 24.hours).order('created_at DESC')
 
     Request.order('created_at DESC').map { |request|
-      minutes = ((Time.now() - request.created_at) / 60).round
+      seconds = (Time.now() - request.updated_at).round
       {
         id: request.id,
+        type: "request",
         creator_id: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
         video: get_url(request.video),
         donor_id: request.donor_id,
-        minutes: minutes,
+        seconds: seconds,
         received: request.received,
         reports: request.reports,
-        created_at: request.created_at
+        created_at: request.created_at,
+        updated_at: request.updated_at
       }
     }
   end
 
   def self.user_history(user_id)
     Request.where(creator_id: user_id).or(Request.where(donor_id: user_id)).order('updated_at DESC').map { |request|
-      minutes = ((Time.now() - request.created_at) / 60).round
+      seconds = (Time.now() - request.updated_at).round
       {
         id: request.id,
+        type: "request",
         creator_id: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
         video: get_url(request.video),
         donor_id: request.donor_id,
-        minutes: minutes,
+        seconds: seconds,
         received: request.received,
         reports: request.reports,
-        created_at: request.created_at
+        created_at: request.created_at,
+        updated_at: request.updated_at
       }
     }
   end
 
   def self.anon_history(anon_id)
     Request.where(creator_id: anon_id).or(Request.where(donor_id: anon_id)).order('updated_at DESC').map { |request|
-      minutes = ((Time.now() - request.created_at) / 60).round
+      seconds = (Time.now() - request.updated_at).round
       {
         id: request.id,
+        type: "request",
         creator_id: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
         video: get_url(request.video),
         donor_id: request.donor_id,
-        minutes: minutes,
+        seconds: seconds,
         received: request.received,
         reports: request.reports,
-        created_at: request.created_at
+        created_at: request.created_at,
+        updated_at: request.updated_at
       }
     }
   end

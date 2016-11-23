@@ -7,48 +7,54 @@ class ThankYou < ApplicationRecord
 
   def self.activity
     ThankYou.order('created_at DESC').map { |thank_you|
-      minutes = ((Time.now() - thank_you.created_at) / 60).round
+      seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
+        type: "thankYou",
         creator_id: thank_you.creator_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
         video: get_url(thank_you.video),
-        minutes: minutes,
+        seconds: seconds,
         reports: thank_you.reports,
-        created_at: thank_you.created_at
+        created_at: thank_you.created_at,
+        updated_at: thank_you.updated_at
       }
     }
   end
 
   def self.user_history(user_id)
     ThankYou.where(creator_id: user_id).order('updated_at DESC').map { |thank_you|
-      minutes = ((Time.now() - thank_you.created_at) / 60).round
+      seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
+        type: "thankYou",
         creator_id: thank_you.creator_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
         video: get_url(thank_you.video),
-        minutes: minutes,
+        seconds: seconds,
         reports: thank_you.reports,
-        created_at: thank_you.created_at
+        created_at: thank_you.created_at,
+        updated_at: thank_you.updated_at
       }
     }
   end
 
   def self.anon_history(anon_id)
     ThankYou.where(creator_id: anon_id).order('updated_at DESC').map { |thank_you|
-      minutes = ((Time.now() - thank_you.created_at) / 60).round
+      seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
+        type: "thankYou",
         creator_id: thank_you.creator_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
         video: get_url(thank_you.video),
-        minutes: minutes,
+        seconds: seconds,
         reports: thank_you.reports,
-        created_at: thank_you.created_at
+        created_at: thank_you.created_at,
+        updated_at: thank_you.updated_at
       }
     }
   end

@@ -13,7 +13,7 @@ class ThankYouController < ApplicationController
       @requests = Request.open_requests
       @thank_yous = ThankYou.activity
       @signed_request = set_presigned_put_url(@thank_you.video)
-      render :json => { requests: @requests, thankYous: @thank_yous totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request, recentThankYou: @thank_you }
+      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request, recentThankYou: @thank_you }
     else
       render :json => { errorMessage: "Thank You was not created." }
     end
