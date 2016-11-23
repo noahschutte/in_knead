@@ -79,5 +79,6 @@ class Request < ApplicationRecord
     def self.get_url(video)
       @asset = S3_BUCKET.object("uploads/#{video}")
       @url = @asset.presigned_url(:get)
+      @url.sub!('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
     end
 end
