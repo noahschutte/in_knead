@@ -37,30 +37,32 @@ class UsersController < ApplicationController
 
       @recent_successful_request = User.recent_successful_request(@user.id)
 
-      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email, recentSuccessfulRequest: @recent_successful_request, recentThankYou: @recent_thank_you }
+      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email, recentSuccessfulRequest: @recent_successful_request, recentThankYou: @recent_thank_you }
     elsif @user && User.recent_successful_request(@user.id)
       @recent_successful_request = User.recent_successful_request(@user.id)
 
-      render :json => { user: @user, email: @user.current_email, activeDonation: nil, recentSuccessfulRequest: @recent_successful_request, recentThankYou: @recent_thank_you }
+      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, recentSuccessfulRequest: @recent_successful_request, recentThankYou: @recent_thank_you }
     elsif @user && User.recent_donation(@user.id)
       @active_donation = Request.active_donation(@user)
 
       @anon = User.find(@active_donation.creator_id)
       @anon_email = @anon.current_email
 
-      render :json => { user: @user, email: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
+      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: @active_donation, anonEmail: @anon_email, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
     elsif @user
-      render :json => { user: @user, email: @user.current_email, activeDonation: nil, anonEmail: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
+      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, anonEmail: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
     else
-      @user = User.create(fb_userID: @fb_userID, signup_email: @email, current_email: @email)
-      render :json => { user: @user, email: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
+      @user = User.create!(fb_userID: @fb_userID, signup_email: @email)
+      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
     end
   end
 
   def update
     @user = User.find(request[:id])
+    p "updatedEmail"
+    p params[:updatedEmail]
     if @user.update(current_email: params[:updatedEmail])
-      render :json => { email: @user.current_email, errorMessage: "Your email was successfully updated." }
+      render :json => { user: @user, email: @user.current_email, errorMessage: "Your email was successfully updated." }
     else
       render :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
     end
