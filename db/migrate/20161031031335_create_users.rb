@@ -3,7 +3,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
     create_table :users do |t|
       t.integer :fb_userID, limit: 8, null:false
       t.string :signup_email, null: false
-      t.string :current_email, null: false
+      t.string :current_email
       t.integer :rating, default: 0
 
       t.timestamps null: false
