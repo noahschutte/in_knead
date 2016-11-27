@@ -5,8 +5,6 @@ class RequestsController < ApplicationController
     @pizzas = Request.total_pizzas_donated
     @donated_pizzas = @pizzas ? @pizzas : 0
     @requests = Request.open_requests
-    p "REQUESTS"
-    p @requests
     @thank_yous = ThankYou.activity
     @asset = S3_BUCKET.object('iwantpizza.mp4')
     @url = @asset.presigned_url(:get)
