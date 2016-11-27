@@ -5,6 +5,8 @@ class RequestsController < ApplicationController
     @pizzas = Request.total_pizzas_donated
     @donated_pizzas = @pizzas ? @pizzas : 0
     @requests = Request.open_requests
+    p "REQUESTS"
+    p @requests
     @thank_yous = ThankYou.activity
     @asset = S3_BUCKET.object('iwantpizza.mp4')
     @url = @asset.presigned_url(:get)
@@ -84,6 +86,10 @@ class RequestsController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_BUCKET']).object("uploads/#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      return @put_url
+      # p "@PUT_URL"
+      # p @put_url
+      # p "@PUT_URL"
+      # p @put_url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      # @put_url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
     end
 end

@@ -33,14 +33,14 @@ request1 = {
   creator: joe,
   pizzas: 2,
   vendor: "Papa Johns",
-  video: "1556_1881.mp4"
+  video: "1556_1881"
 }
 
 request2 = {
   creator: monica,
   pizzas: 2,
   vendor: "Dominos",
-  video: "3862_2925.mp4",
+  video: "3862_2925",
   donor_id: 1
 }
 
@@ -48,14 +48,14 @@ request3 = {
   creator: bob,
   pizzas: 3,
   vendor: "Pizza Hut",
-  video: "4190_4633.mp4"
+  video: "4190_4633"
 }
 
 request4 = {
   creator: fred,
   pizzas: 1,
   vendor: "Dominos",
-  video: "YOU WANT YOUR PIZZA ROLLZ (sky short).mp4"
+  video: "YOU WANT YOUR PIZZA ROLLZ (sky short)"
 }
 
 requests = [request1, request2, request3, request4]
