@@ -59,10 +59,8 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(request[:id])
-    p "updatedEmail"
-    p params[:updatedEmail]
     if @user.update(current_email: params[:updatedEmail])
-      render :json => { user: @user, email: @user.current_email, errorMessage: "Your email was successfully updated." }
+      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, errorMessage: "Your email was successfully updated." }
     else
       render :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
     end

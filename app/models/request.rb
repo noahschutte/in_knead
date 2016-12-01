@@ -73,6 +73,27 @@ class Request < ApplicationRecord
     }
   end
 
+  def self.show(id)
+    @request = Request.find(id)
+    @seconds = (Time.now() - @request.updated_at).round
+    {
+      id: @request.id,
+      type: "request",
+      creator_id: @request.creator_id,
+      pizzas: @request.pizzas,
+      vendor: @request.vendor,
+      video: get_url(@request.video),
+      compressed_video: get_compressed_url(@request.video),
+      thumbnail: get_thumbnail_url(@request.video),
+      donor_id: @request.donor_id,
+      seconds: @seconds,
+      received: @request.received,
+      reports: @request.reports,
+      created_at: @request.created_at,
+      updated_at: @request.updated_at
+    }
+  end
+
   def self.total_pizzas_donated
     Request.where.not(donor_id: nil).map{|request| request.pizzas}.reduce(:+)
   end
