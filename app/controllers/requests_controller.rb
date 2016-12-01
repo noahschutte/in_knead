@@ -56,11 +56,11 @@ class RequestsController < ApplicationController
       @thank_yous = ThankYou.activity
       @pizzas = Request.total_pizzas_donated
       @active_donation = Request.active_donation(@user)
-
       @anon = User.find(@request.creator_id)
       @anon_email = @anon.current_email
+      @request_show = Request.show(@request.id)
 
-      render :json => { totalDonatedPizzas: @pizzas, requests: @requests, thankYous: @thank_yous, activeDonation: @active_donation, anonEmail: @anon_email }
+      render :json => { totalDonatedPizzas: @pizzas, request: @request_show, requests: @requests, thankYous: @thank_yous, activeDonation: @active_donation, anonEmail: @anon_email }
     else
       render :json => { errorMessage: "Cannot donate at this time." }
     end
