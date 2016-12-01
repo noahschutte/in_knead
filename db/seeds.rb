@@ -33,33 +33,50 @@ request1 = {
   creator: joe,
   pizzas: 2,
   vendor: "Papa Johns",
-  video: "1556_1881"
+  video: "1111",
+  donor_id: 3,
 }
 
 request2 = {
   creator: monica,
-  pizzas: 2,
+  pizzas: 1,
   vendor: "Dominos",
-  video: "3862_2925",
-  donor_id: 1
+  video: "2222"
 }
 
 request3 = {
   creator: bob,
   pizzas: 3,
   vendor: "Pizza Hut",
-  video: "4190_4633"
+  video: "4444",
+  donor_id: 5,
 }
 
-request4 = {
-  creator: fred,
-  pizzas: 1,
-  vendor: "Dominos",
-  video: "YOU WANT YOUR PIZZA ROLLZ (sky short)"
-}
 
-requests = [request1, request2, request3, request4]
+requests = [request1, request2, request3]
 
 requests.each_with_index do |request, index|
   Request.create(creator: User.find(index+1), pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id])
+end
+
+thankYou1 = {
+  creator: 1,
+  request_id: Request.find(1).id,
+  pizzas: 2,
+  vendor: "Papa Johns",
+  video: "3333"
+}
+
+thankYou3 = {
+  creator: 3,
+  request_id: Request.find(3).id,
+  pizzas: 3,
+  vendor: "Pizza Hut",
+  video: "6666"
+}
+
+thankYous = [thankYou1, thankYou3]
+
+thankYous.each_with_index do |thankYou, index|
+  ThankYou.create(creator: User.find(thankYou[:creator]), request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video])
 end
