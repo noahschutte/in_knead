@@ -63,3 +63,9 @@ requests = [request1, request2, request3, request4]
 requests.each_with_index do |request, index|
   Request.create(creator: User.find(index+1), pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id])
 end
+
+# Create a bunch of requests to test scrolling
+
+15.times do 
+  Request.create(creator: User.first, pizzas: rand(2), vendor: "Dominos", video: "YOU WANT YOUR PIZZA ROLLZ (sky short)")
+end
