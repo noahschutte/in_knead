@@ -58,6 +58,7 @@ class UsersController < ApplicationController
         render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
       else
         render :json => { errorMessage: "Cannot log in" }
+      end
     end
   end
 
