@@ -26,13 +26,6 @@ class UsersController < ApplicationController
     @fb_userID = request[:userInfo][:id]
     @user = User.find_by(fb_userID: @fb_userID)
 
-    p "@email"
-    p @email
-    p "@fb_userID"
-    p @fb_userID
-    p "@user"
-    p @user
-
     if @user && User.recent_thank_you(@user.id)
       @recent_thank_you = User.recent_thank_you(@user.id)
     else
