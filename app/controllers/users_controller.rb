@@ -25,12 +25,6 @@ class UsersController < ApplicationController
     @email = request[:userInfo][:email]
     @fb_userID = request[:userInfo][:id]
     @user = User.find_by(fb_userID: @fb_userID)
-    p "@email"
-    p @email
-    p "@fb_userID"
-    p @fb_userID
-    p "@user"
-    p @user
     if @user && User.recent_thank_you(@user.id)
       @recent_thank_you = User.recent_thank_you(@user.id)
     else
@@ -58,8 +52,12 @@ class UsersController < ApplicationController
     elsif @user
       render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, anonEmail: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
     else
-      @user = User.create!(fb_userID: @fb_userID, signup_email: @email)
-      render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
+      @user = User.build(fb_userID: @fb_userID, signup_email: @email)
+
+      if @user.save!
+        render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you }
+      else
+        render :json => { errorMessage: "Cannot log in" }
     end
   end
 

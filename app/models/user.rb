@@ -1,8 +1,7 @@
 class User < ApplicationRecord
 
     validates_presence_of :fb_userID
-    validates_uniqueness_of :fb_userID, :signup_email, :current_email
-    validates_format_of :signup_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+    validates_uniqueness_of :fb_userID
     validates_format_of :current_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :update
 
     has_many :requests, class_name: "Request", foreign_key: :creator_id
