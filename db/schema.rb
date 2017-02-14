@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20161031032341) do
     t.integer  "pizzas",                 null: false
     t.string   "vendor",                 null: false
     t.string   "video",                  null: false
-    t.integer  "donor_id",   default: 2
+    t.integer  "donor_id"
     t.integer  "received",   default: 0
     t.integer  "reports",    default: 0
     t.datetime "created_at",             null: false
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20161031032341) do
   create_table "thank_yous", force: :cascade do |t|
     t.integer  "creator_id",             null: false
     t.integer  "request_id",             null: false
+    t.integer  "donor_id",               null: false
     t.integer  "pizzas",                 null: false
     t.string   "vendor",                 null: false
     t.string   "video",                  null: false

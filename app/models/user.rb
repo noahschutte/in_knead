@@ -23,4 +23,8 @@ class User < ApplicationRecord
       Request.where(donor_id: user_id).where("updated_at > ?", DateTime.now - 30.minutes)[0]
     end
 
+    def self.received_thank_you(user_id)
+      ThankYou.where(donor_id: user_id).order('updated_at DESC')[0]
+    end
+
 end

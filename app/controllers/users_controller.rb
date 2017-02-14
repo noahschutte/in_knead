@@ -31,6 +31,11 @@ class UsersController < ApplicationController
     else
       @recent_thank_you = nil
     end
+    if @user && User.received_thank_you(@user.id)
+      @received_thank_you = User.received_thank_you(@user.id)
+    else
+      @received_thank_you = nil
+    end
     if @user && User.recent_successful_request(@user.id) && User.recent_donation(@user.id)
       @active_donation = Request.active_donation(@user)
       @anon = User.find(@active_donation.creator_id)
