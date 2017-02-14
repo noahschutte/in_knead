@@ -3,7 +3,7 @@ class ThankYouController < ApplicationController
   def create
     @user = User.find(request[:userID])
     @recent_successful_request = User.recent_successful_request(@user.id)
-    @thank_you = ThankYou.new(creator: @user, donor_id: @recent_successful_request.creator_id, request: @recent_successful_request, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
+    @thank_you = ThankYou.new(creator: @user, donor_id: @recent_successful_request.donor_id, request: @recent_successful_request, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
     @recent_request = User.recent_request(@user.id)
 
     if @thank_you.save!
