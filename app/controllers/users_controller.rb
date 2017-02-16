@@ -11,13 +11,11 @@ class UsersController < ApplicationController
     @user_id = request[:id]
     @user_requests = Request.user_history(@user_id)
     @user_thank_yous = ThankYou.user_history(@user_id)
-    @asset = S3_BUCKET.object('iwantpizza.mp4')
-    @url = @asset.presigned_url(:get)
     @recent_successful_request = User.recent_successful_request(@user_id)
     if @user_requests.any? || @user_thank_yous.any?
-      render :json => { totalDonatedPizzas: @donated_pizzas, userRequests: @user_requests, userThankYous: @user_thank_yous, url: @url, recentSuccessfulRequest: @recent_successful_request }
+      render :json => { totalDonatedPizzas: @donated_pizzas, userRequests: @user_requests, userThankYous: @user_thank_yous, recentSuccessfulRequest: @recent_successful_request }
     else
-      render :json => { totalDonatedPizzas: @donated_pizzas, userRequests: @user_requests, userThankYous: @user_thank_yous, url: @url, recentSuccessfulRequest: @recent_successful_request, errorMessage: 'You have no activity.' }
+      render :json => { totalDonatedPizzas: @donated_pizzas, userRequests: @user_requests, userThankYous: @user_thank_yous, recentSuccessfulRequest: @recent_successful_request, errorMessage: 'You have no activity.' }
     end
   end
 
