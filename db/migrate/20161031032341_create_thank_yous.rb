@@ -8,6 +8,7 @@ class CreateThankYous < ActiveRecord::Migration[5.0]
       t.string :vendor, null: false
       t.string :video, null: false
       t.integer :reports, default: 0
+      t.boolean :donor_viewed, default: false
 
       t.timestamps null: false
     end

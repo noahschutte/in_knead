@@ -20,6 +20,7 @@ class ThankYou < ApplicationRecord
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
         reports: thank_you.reports,
+        donor_viewed: thank_you.donor_viewed,
         created_at: thank_you.created_at,
         updated_at: thank_you.updated_at
       }
@@ -41,6 +42,7 @@ class ThankYou < ApplicationRecord
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
         reports: thank_you.reports,
+        donor_viewed: thank_you.donor_viewed,
         created_at: thank_you.created_at,
         updated_at: thank_you.updated_at
       }
@@ -62,6 +64,7 @@ class ThankYou < ApplicationRecord
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
         reports: thank_you.reports,
+        donor_viewed: thank_you.donor_viewed,
         created_at: thank_you.created_at,
         updated_at: thank_you.updated_at
       }

@@ -65,7 +65,8 @@ thankYou1 = {
   request_id: Request.find(1).id,
   pizzas: 2,
   vendor: "Papa Johns",
-  video: "3333"
+  video: "3333",
+  donor_viewed: true
 }
 
 thankYou3 = {
@@ -74,11 +75,12 @@ thankYou3 = {
   request_id: Request.find(3).id,
   pizzas: 3,
   vendor: "Pizza Hut",
-  video: "6666"
+  video: "6666",
+  donor_viewed: false
 }
 
 thankYous = [thankYou1, thankYou3]
 
 thankYous.each_with_index do |thankYou, index|
-  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video])
+  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed])
 end
