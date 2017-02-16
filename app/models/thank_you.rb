@@ -79,13 +79,13 @@ class ThankYou < ApplicationRecord
     end
 
     def self.get_compressed_url(video)
-      @asset = S3_THANKYOUS_COMPRESSED.object("uploads/#{video}.mp4")
+      @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
       # @url.sub!('in-knead-output.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
     end
 
     def self.get_thumbnail_url(video)
-      @asset = S3_THANKYOUS_THUMBNAILS.object("uploads/#{video}-00001.png")
+      @asset = S3_THANKYOUS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
       # @url.sub!('in-knead-thumbnails.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
     end
