@@ -6,10 +6,8 @@ class RequestsController < ApplicationController
     @donated_pizzas = @pizzas ? @pizzas : 0
     @requests = Request.open_requests
     @thank_yous = ThankYou.activity
-    @asset = S3_BUCKET.object('iwantpizza.mp4')
-    @url = @asset.presigned_url(:get)
     if @requests.any? || @thank_yous.any?
-      render :json => { totalDonatedPizzas: @donated_pizzas, requests: @requests, thankYous: @thank_yous, url: @url }
+      render :json => { totalDonatedPizzas: @donated_pizzas, requests: @requests, thankYous: @thank_yous }
     else
       render :json => { totalDonatedPizzas: @donated_pizzas,  errorMessage: 'No current requests.', url: @url }
     end
@@ -82,7 +80,7 @@ class RequestsController < ApplicationController
   private
     def set_presigned_put_url(object_name)
       @s3 = Aws::S3::Resource.new
-      @object = @s3.bucket(ENV['S3_BUCKET']).object("uploads/#{object_name}")
+      @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
       # p "@PUT_URL"
       # p @put_url

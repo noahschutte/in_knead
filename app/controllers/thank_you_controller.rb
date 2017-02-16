@@ -27,7 +27,7 @@ class ThankYouController < ApplicationController
   private
     def set_presigned_put_url(object_name)
       @s3 = Aws::S3::Resource.new
-      @object = @s3.bucket(ENV['S3_BUCKET']).object("uploads/#{object_name}")
+      @object = @s3.bucket(ENV['S3_THANKYOUS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
       # p "@PUT_URL"
       # p @put_url
