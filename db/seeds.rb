@@ -48,7 +48,7 @@ request3 = {
   creator: bob,
   pizzas: 3,
   vendor: "Pizza Hut",
-  video: "4444",
+  video: "3333",
   donor_id: 5,
 }
 
@@ -65,7 +65,7 @@ thankYou1 = {
   request_id: Request.find(1).id,
   pizzas: 2,
   vendor: "Papa Johns",
-  video: "3333",
+  video: "4444",
   donor_viewed: true
 }
 
