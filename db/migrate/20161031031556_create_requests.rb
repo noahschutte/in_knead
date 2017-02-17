@@ -8,6 +8,7 @@ class CreateRequests < ActiveRecord::Migration[5.0]
       t.integer :donor_id
       t.integer :received, default: 0
       t.integer :reports, default: 0
+      t.boolean :transcoded, default: false
 
       t.timestamps null: false
     end

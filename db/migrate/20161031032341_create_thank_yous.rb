@@ -9,6 +9,7 @@ class CreateThankYous < ActiveRecord::Migration[5.0]
       t.string :video, null: false
       t.integer :reports, default: 0
       t.boolean :donor_viewed, default: false
+      t.boolean :transcoded, default: false
 
       t.timestamps null: false
     end
