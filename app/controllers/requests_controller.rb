@@ -40,12 +40,13 @@ class RequestsController < ApplicationController
   end
 
   def update
+    puts "UPDATE REQUEST ROUTE HERE!!!!!!"
     if params[:transcodedVideo]
-      p "transcodedVideo"
-      p params[:transcodedVideo]
+      puts "transcodedVideo"
+      puts params[:transcodedVideo]
       @transcodedRequest = Request.find_by(video: params[:transcodedVideo])
-      p "TRANSCODED REQUEST"
-      p @transcodedRequest
+      puts "TRANSCODED REQUEST"
+      puts @transcodedRequest
       @transcodedRequest.update(transcoded: true)
       render :json => { errorMessage: "success" }
     end
