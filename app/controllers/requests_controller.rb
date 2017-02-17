@@ -49,28 +49,29 @@ class RequestsController < ApplicationController
       puts @transcodedRequest
       @transcodedRequest.update(transcoded: true)
       render :json => { errorMessage: "success" }
-    end
-    @request = Request.find(params[:id])
-    @user = User.find(params[:userID])
-    if params[:receivedDonation] && @request.update(received: 1)
-      @recent_successful_request = User.recent_successful_request(@user.id)
-      render :json => { recentSuccessfulRequest: @recent_successful_request }
-    elsif Request.active_donation(@user)
-      render :json => { errorMessage: "You have recently made a donation." }
-    elsif @request.donor_id != nil
-      render :json => { errorMessage: "This request has already received a donation." }
-    elsif @request.update(donor_id: @user.id)
-      @requests = Request.open_requests
-      @thank_yous = ThankYou.activity
-      @pizzas = Request.total_pizzas_donated
-      @active_donation = Request.active_donation(@user)
-      @anon = User.find(@request.creator_id)
-      @anon_email = @anon.current_email
-      @request_show = Request.show(@request.id)
-
-      render :json => { totalDonatedPizzas: @pizzas, request: @request_show, requests: @requests, thankYous: @thank_yous, activeDonation: @active_donation, anonEmail: @anon_email }
     else
-      render :json => { errorMessage: "Cannot donate at this time." }
+      @request = Request.find(params[:id])
+      @user = User.find(params[:userID])
+      if params[:receivedDonation] && @request.update(received: 1)
+        @recent_successful_request = User.recent_successful_request(@user.id)
+        render :json => { recentSuccessfulRequest: @recent_successful_request }
+      elsif Request.active_donation(@user)
+        render :json => { errorMessage: "You have recently made a donation." }
+      elsif @request.donor_id != nil
+        render :json => { errorMessage: "This request has already received a donation." }
+      elsif @request.update(donor_id: @user.id)
+        @requests = Request.open_requests
+        @thank_yous = ThankYou.activity
+        @pizzas = Request.total_pizzas_donated
+        @active_donation = Request.active_donation(@user)
+        @anon = User.find(@request.creator_id)
+        @anon_email = @anon.current_email
+        @request_show = Request.show(@request.id)
+
+        render :json => { totalDonatedPizzas: @pizzas, request: @request_show, requests: @requests, thankYous: @thank_yous, activeDonation: @active_donation, anonEmail: @anon_email }
+      else
+        render :json => { errorMessage: "Cannot donate at this time." }
+      end
     end
   end
 
