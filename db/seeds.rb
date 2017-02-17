@@ -34,7 +34,7 @@ request1 = {
   pizzas: 2,
   vendor: "Papa Johns",
   video: "1111",
-  donor_id: 3,
+  donor_id: 3
 }
 
 request2 = {
@@ -49,7 +49,7 @@ request3 = {
   pizzas: 3,
   vendor: "Pizza Hut",
   video: "3333",
-  donor_id: 5,
+  donor_id: 5
 }
 
 
