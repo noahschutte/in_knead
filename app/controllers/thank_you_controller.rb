@@ -19,6 +19,12 @@ class ThankYouController < ApplicationController
     end
   end
 
+  def update
+    @donorViewed = ThankYou.find_by(video: params[:viewedVideo])
+    @donorViewed.update(donor_viewed: true)
+    render :json => { errorMessage: "success" }
+  end
+
   def show
     @thank_you = ThankYou.find(request[:thank_you_id])
     render :json => { thankYou: @thank_you }
