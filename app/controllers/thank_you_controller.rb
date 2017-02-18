@@ -25,6 +25,19 @@ class ThankYouController < ApplicationController
     render :json => { errorMessage: "success" }
   end
 
+  def destroy
+    @thank_you = ThankYou.find_by(video: params[:videoKey])
+    if @thank_you.destroy
+      @pizzas = Request.total_pizzas_donated
+      @donated_pizzas = @pizzas ? @pizzas : 0
+      @requests = Request.open_requests
+      @thank_yous = ThankYou.activity
+      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, errorMessage: "Thank You was destroyed." }
+    else
+      render :json => { errorMessage: "Thank You entry could not be deleted." }
+    end
+  end
+
   def show
     @thank_you = ThankYou.find(request[:thank_you_id])
     render :json => { thankYou: @thank_you }
