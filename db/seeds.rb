@@ -59,7 +59,7 @@ request3 = {
 requests = [request1, request2, request3]
 
 requests.each_with_index do |request, index|
-  Request.create(creator: User.find(index+1), pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id])
+  Request.create(creator: User.find(index+1), pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id], transcoded: request[:transcoded])
 end
 
 thankYou1 = {
@@ -87,5 +87,5 @@ thankYou3 = {
 thankYous = [thankYou1, thankYou3]
 
 thankYous.each_with_index do |thankYou, index|
-  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed])
+  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed], transcoded: request[:transcoded])
 end
