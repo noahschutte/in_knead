@@ -87,5 +87,5 @@ thankYou3 = {
 thankYous = [thankYou1, thankYou3]
 
 thankYous.each_with_index do |thankYou, index|
-  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed], transcoded: request[:transcoded])
+  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed], transcoded: thankYou[:transcoded])
 end

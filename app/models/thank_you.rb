@@ -6,7 +6,7 @@ class ThankYou < ApplicationRecord
   belongs_to :request, class_name: "Request", foreign_key: :request_id
 
   def self.activity
-    ThankYou.order('created_at DESC').map { |thank_you|
+    ThankYou.where(transcoded: true).order('created_at DESC').map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
