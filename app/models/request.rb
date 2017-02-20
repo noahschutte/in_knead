@@ -8,7 +8,7 @@ class Request < ApplicationRecord
   def self.open_requests
     # Request.where("created_at > ?", DateTime.now - 24.hours).order('created_at DESC')
 
-    Request.order('created_at DESC').map { |request|
+    Request.where(transcoded: true).order('created_at DESC').map { |request|
       seconds = (Time.now() - request.updated_at).round
       {
         id: request.id,
