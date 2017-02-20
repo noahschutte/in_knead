@@ -34,14 +34,16 @@ request1 = {
   pizzas: 2,
   vendor: "Papa Johns",
   video: "1111",
-  donor_id: 3
+  donor_id: 3,
+  transcoded: true
 }
 
 request2 = {
   creator: monica,
   pizzas: 1,
   vendor: "Dominos",
-  video: "2222"
+  video: "2222",
+  transcoded: true
 }
 
 request3 = {
@@ -49,7 +51,8 @@ request3 = {
   pizzas: 3,
   vendor: "Pizza Hut",
   video: "3333",
-  donor_id: 5
+  donor_id: 5,
+  transcoded: true
 }
 
 
@@ -66,7 +69,8 @@ thankYou1 = {
   pizzas: 2,
   vendor: "Papa Johns",
   video: "4444",
-  donor_viewed: true
+  donor_viewed: true,
+  transcoded: true
 }
 
 thankYou3 = {
@@ -76,7 +80,8 @@ thankYou3 = {
   pizzas: 3,
   vendor: "Pizza Hut",
   video: "6666",
-  donor_viewed: false
+  donor_viewed: false,
+  transcoded: true
 }
 
 thankYous = [thankYou1, thankYou3]
