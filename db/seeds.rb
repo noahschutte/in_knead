@@ -1,6 +1,6 @@
 joe = {
   fb_userID: 11111,
-  email: "joe@email.com",
+  email: "joe@email.com"
 }
 
 monica = {
