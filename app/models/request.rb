@@ -108,12 +108,20 @@ class Request < ApplicationRecord
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
-      @url.sub('in-knead-requests-compressed.s3.amazonaws.com', "d11afr9krw05ex.cloudfront.net")
+      p "@url"
+      p @url
+      p "sub"
+      p @url.sub('in-knead-requests-compressed.s3.amazonaws.com', "d11afr9krw05ex.cloudfront.net")
+      @url
     end
 
     def self.get_thumbnail_url(video)
       @asset = S3_REQUESTS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
-      @url.sub('in-knead-requests-thumbnails.s3.amazonaws.com', "d2ed940i9bzi4l.cloudfront.net")
+      p "@url"
+      p @url
+      p "sub"
+      p @url.sub('in-knead-requests-thumbnails.s3.amazonaws.com', "d2ed940i9bzi4l.cloudfront.net")
+      @url
     end
 end
