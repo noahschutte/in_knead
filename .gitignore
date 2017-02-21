@@ -24,6 +24,3 @@
 
 # Dump Files
 *.sql
-
-# CloudFront Keys
-*.pem
