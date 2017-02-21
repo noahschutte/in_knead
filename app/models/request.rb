@@ -16,7 +16,6 @@ class Request < ApplicationRecord
         creator_id: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
-        video: get_url(request.video),
         compressed_video: get_compressed_url(request.video),
         thumbnail: get_thumbnail_url(request.video),
         donor_id: request.donor_id,
@@ -38,7 +37,6 @@ class Request < ApplicationRecord
         creator_id: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
-        video: get_url(request.video),
         compressed_video: get_compressed_url(request.video),
         thumbnail: get_thumbnail_url(request.video),
         donor_id: request.donor_id,
@@ -60,7 +58,6 @@ class Request < ApplicationRecord
         creator_id: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
-        video: get_url(request.video),
         compressed_video: get_compressed_url(request.video),
         thumbnail: get_thumbnail_url(request.video),
         donor_id: request.donor_id,
@@ -82,7 +79,6 @@ class Request < ApplicationRecord
       creator_id: @request.creator_id,
       pizzas: @request.pizzas,
       vendor: @request.vendor,
-      video: get_url(@request.video),
       compressed_video: get_compressed_url(@request.video),
       thumbnail: get_thumbnail_url(@request.video),
       donor_id: @request.donor_id,
@@ -103,21 +99,21 @@ class Request < ApplicationRecord
   end
 
   private
-    def self.get_url(video)
-      @asset = S3_REQUESTS.object("#{video}")
-      @url = @asset.presigned_url(:get)
+    # def self.get_url(video)
+    #   @asset = S3_REQUESTS.object("#{video}")
+    #   @url = @asset.presigned_url(:get)
       # @url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
-    end
+    # end
 
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
-      # @url.sub!('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      @url.sub('in-knead-requests-compressed.s3.amazonaws.com', "d11afr9krw05ex.cloudfront.net")
     end
 
     def self.get_thumbnail_url(video)
       @asset = S3_REQUESTS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
-      # @url.sub!('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      @url.sub('in-knead-requests-thumbnails.s3.amazonaws.com', "d2ed940i9bzi4l.cloudfront.net")
     end
 end

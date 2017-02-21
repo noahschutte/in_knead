@@ -6,7 +6,7 @@ class ThankYouController < ApplicationController
     @thank_you = ThankYou.new(creator: @user, donor_id: @recent_successful_request.donor_id, request: @recent_successful_request, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
     @recent_request = User.recent_request(@user.id)
 
-    if @thank_you.save!
+    if @thank_you.save
       @recent_thank_you = User.recent_thank_you(@user.id)
       @pizzas = Request.total_pizzas_donated
       @donated_pizzas = @pizzas ? @pizzas : 0
@@ -48,10 +48,6 @@ class ThankYouController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_THANKYOUS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      # p "@PUT_URL"
-      # p @put_url
-      # p "@PUT_URL"
-      # p @put_url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
-      # @put_url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      @put_url.sub('in-knead-thankyous.s3.amazonaws.com', "d244yzatrec2va.cloudfront.net")
     end
 end
