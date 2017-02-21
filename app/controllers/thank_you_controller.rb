@@ -48,6 +48,10 @@ class ThankYouController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_THANKYOUS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      # @put_url.sub('in-knead-thankyous.s3.amazonaws.com', "d244yzatrec2va.cloudfront.net")
+      p "@put_url"
+      p @put_url
+      p "sub"
+      p @put_url.sub('in-knead-thankyous.s3.amazonaws.com', "d244yzatrec2va.cloudfront.net")
+      @put_url
     end
 end
