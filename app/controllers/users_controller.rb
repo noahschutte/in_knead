@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     else
       @user = User.new(fb_userID: @fb_userID, signup_email: @email)
 
-      if @user.save!
+      if @user.save
         render :json => { user: @user, signupEmail: @user.signup_email, currentEmail: @user.current_email, activeDonation: nil, recentSuccessfulRequest: nil, recentThankYou: @recent_thank_you, receivedThankYou: @received_thank_you }
       else
         render :json => { errorMessage: "Cannot log in" }

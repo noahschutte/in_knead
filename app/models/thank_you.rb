@@ -15,7 +15,6 @@ class ThankYou < ApplicationRecord
         donor_id: thank_you.donor_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
-        video: get_url(thank_you.video),
         compressed_video: get_compressed_url(thank_you.video),
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
@@ -37,7 +36,6 @@ class ThankYou < ApplicationRecord
         donor_id: thank_you.donor_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
-        video: get_url(thank_you.video),
         compressed_video: get_compressed_url(thank_you.video),
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
@@ -59,7 +57,6 @@ class ThankYou < ApplicationRecord
         donor_id: thank_you.donor_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
-        video: get_url(thank_you.video),
         compressed_video: get_compressed_url(thank_you.video),
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
@@ -72,21 +69,21 @@ class ThankYou < ApplicationRecord
   end
 
   private
-    def self.get_url(video)
-      @asset = S3_THANKYOUS.object("#{video}")
-      @url = @asset.presigned_url(:get)
+    # def self.get_url(video)
+    #   @asset = S3_THANKYOUS.object("#{video}")
+    #   @url = @asset.presigned_url(:get)
       # @url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
-    end
+    # end
 
     def self.get_compressed_url(video)
       @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
-      # @url.sub!('in-knead-output.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      @url.sub('in-knead-thankyous-compressed.s3.amazonaws.com', "d2ldogngkzp5pi.cloudfront.net")
     end
 
     def self.get_thumbnail_url(video)
       @asset = S3_THANKYOUS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
-      # @url.sub!('in-knead-thumbnails.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      @url.sub('in-knead-thankyous-thumbnails.s3.amazonaws.com', "d34vf9lcht8rtn.cloudfront.net")
     end
 end

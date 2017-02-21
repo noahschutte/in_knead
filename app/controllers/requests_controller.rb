@@ -40,13 +40,8 @@ class RequestsController < ApplicationController
   end
 
   def update
-    puts "UPDATE REQUEST ROUTE HERE!!!!!!!"
     if params[:transcodedVideo]
-      puts "transcodedVideo"
-      puts params[:transcodedVideo]
       @transcodedRequest = Request.find_by(video: params[:transcodedVideo])
-      puts "TRANSCODED REQUEST"
-      puts @transcodedRequest
       @transcodedRequest.update(transcoded: true)
       render :json => { errorMessage: "success" }
     else
@@ -93,10 +88,6 @@ class RequestsController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      # p "@PUT_URL"
-      # p @put_url
-      # p "@PUT_URL"
-      # p @put_url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
-      # @put_url.sub('in-knead.s3.amazonaws.com', "d32riymt5m6pak.cloudfront.net")
+      @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
     end
 end
