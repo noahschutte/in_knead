@@ -88,6 +88,10 @@ class RequestsController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
+      p "@put_url"
+      p @put_url
+      p "sub"
+      p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
+      @put_url
     end
 end
