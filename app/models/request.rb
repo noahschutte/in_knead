@@ -98,6 +98,10 @@ class Request < ApplicationRecord
     Request.where(donor_id: user.id).where("updated_at > ?", DateTime.now - 30.minutes)[0]
   end
 
+  def self.donor_fraud(user_id)
+    Request.where(donor_id: user_id).where(received: 0).count > 1 ? true : false
+  end
+
   private
     # def self.get_url(video)
     #   @asset = S3_REQUESTS.object("#{video}")
