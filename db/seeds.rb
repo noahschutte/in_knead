@@ -34,6 +34,7 @@ request1 = {
   pizzas: 2,
   vendor: "Papa Johns",
   video: "1111",
+  donor_id: 4,
   transcoded: true
 }
 
@@ -50,7 +51,7 @@ request3 = {
   pizzas: 3,
   vendor: "Pizza Hut",
   video: "3333",
-  donor_id: 5,
+  donor_id: 1,
   transcoded: true
 }
 
@@ -62,8 +63,8 @@ requests.each_with_index do |request, index|
 end
 
 thankYou1 = {
-  creator: 1,
-  donor_id: 2,
+  creator: User.find(1),
+  donor_id: 4,
   request_id: Request.find(1).id,
   pizzas: 2,
   vendor: "Papa Johns",
@@ -73,7 +74,7 @@ thankYou1 = {
 }
 
 thankYou3 = {
-  creator: 3,
+  creator: User.find(3),
   donor_id: 1,
   request_id: Request.find(3).id,
   pizzas: 3,
@@ -86,5 +87,5 @@ thankYou3 = {
 thankYous = [thankYou1, thankYou3]
 
 thankYous.each_with_index do |thankYou, index|
-  ThankYou.create(creator: User.find(thankYou[:creator]), donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed], transcoded: thankYou[:transcoded])
+  ThankYou.create(creator: thankYou[:creator], donor_id: thankYou[:donor_id], request_id: thankYou[:request_id], pizzas: thankYou[:pizzas], vendor: thankYou[:vendor], video: thankYou[:video], donor_viewed: thankYou[:donor_viewed], transcoded: thankYou[:transcoded])
 end
