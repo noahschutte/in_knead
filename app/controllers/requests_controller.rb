@@ -44,9 +44,14 @@ class RequestsController < ApplicationController
 
   def update
     if params[:transcodedVideo]
-      @transcodedRequest = Request.find_by(video: params[:transcodedVideo])
-      @transcodedRequest.update(transcoded: true)
-      render :json => { errorMessage: "success" }
+      @transcoded_request = Request.find_by(video: params[:transcodedVideo])
+      @transcoded_request.update(transcoded: true)
+      render :json => { errorMessage: "Request updated as transcoded." }
+    elsif params[:report]
+      @report_request = Request.find_by(video: params[:report])
+      @report_request.increment(:reports)
+      @report_request.save
+      render :json => { errorMessage: "Request has been reported." }
     else
       @request = Request.find(params[:id])
       @user = User.find(params[:userID])

@@ -20,9 +20,16 @@ class ThankYouController < ApplicationController
   end
 
   def update
-    @donorViewed = ThankYou.find_by(video: params[:viewedVideo])
-    @donorViewed.update(donor_viewed: true)
-    render :json => { errorMessage: "success" }
+    if params[:report]
+      @report_thank_you = ThankYou.find_by(video: params[:report])
+      @report_thank_you.increment(:reports)
+      @report_thank_you.save
+      render :json => { errorMessage: "Thank You has been reported." }
+    else
+      @donorViewed = ThankYou.find_by(video: params[:viewedVideo])
+      @donorViewed.update(donor_viewed: true)
+      render :json => { errorMessage: "success" }
+    end
   end
 
   def destroy
