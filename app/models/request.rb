@@ -20,7 +20,7 @@ class Request < ApplicationRecord
         thumbnail: get_thumbnail_url(request.video),
         donor_id: request.donor_id,
         seconds: seconds,
-        received: request.received,
+        status: request.status,
         reports: request.reports,
         created_at: request.created_at,
         updated_at: request.updated_at
@@ -41,7 +41,7 @@ class Request < ApplicationRecord
         thumbnail: get_thumbnail_url(request.video),
         donor_id: request.donor_id,
         seconds: seconds,
-        received: request.received,
+        status: request.status,
         reports: request.reports,
         created_at: request.created_at,
         updated_at: request.updated_at
@@ -62,7 +62,7 @@ class Request < ApplicationRecord
         thumbnail: get_thumbnail_url(request.video),
         donor_id: request.donor_id,
         seconds: seconds,
-        received: request.received,
+        status: request.status,
         reports: request.reports,
         created_at: request.created_at,
         updated_at: request.updated_at
@@ -83,7 +83,7 @@ class Request < ApplicationRecord
       thumbnail: get_thumbnail_url(@request.video),
       donor_id: @request.donor_id,
       seconds: @seconds,
-      received: @request.received,
+      status: @request.status,
       reports: @request.reports,
       created_at: @request.created_at,
       updated_at: @request.updated_at
@@ -99,7 +99,7 @@ class Request < ApplicationRecord
   end
 
   def self.donor_fraud(user_id)
-    Request.where(donor_id: user_id).where(received: 0).count > 1 ? true : false
+    Request.where(donor_id: user_id).where(status: "active").count > 1 ? true : false
   end
 
   private

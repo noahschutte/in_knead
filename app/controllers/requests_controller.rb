@@ -47,7 +47,7 @@ class RequestsController < ApplicationController
     else
       @request = Request.find(params[:id])
       @user = User.find(params[:userID])
-      if params[:receivedDonation] && @request.update(received: 1)
+      if params[:receivedDonation] && @request.update(status: "received")
         @recent_successful_request = User.recent_successful_request(@user.id)
         render :json => { recentSuccessfulRequest: @recent_successful_request }
       elsif Request.active_donation(@user)
