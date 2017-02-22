@@ -21,16 +21,16 @@ ActiveRecord::Schema.define(version: 20161031032341) do
   end
 
   create_table "requests", force: :cascade do |t|
-    t.integer  "creator_id",                 null: false
-    t.integer  "pizzas",                     null: false
-    t.string   "vendor",                     null: false
-    t.string   "video",                      null: false
+    t.integer  "creator_id",                    null: false
+    t.integer  "pizzas",                        null: false
+    t.string   "vendor",                        null: false
+    t.string   "video",                         null: false
     t.integer  "donor_id"
-    t.integer  "received",   default: 0
+    t.string   "status",     default: "active"
     t.integer  "reports",    default: 0
     t.boolean  "transcoded", default: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.index ["creator_id"], name: "index_requests_on_creator_id", using: :btree
   end
 
