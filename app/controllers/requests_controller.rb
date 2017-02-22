@@ -38,6 +38,7 @@ class RequestsController < ApplicationController
         render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request }
       else
         render :json => { errorMessage: "Request could not be created." }
+      end
     end
   end
 
