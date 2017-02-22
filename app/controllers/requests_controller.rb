@@ -82,14 +82,15 @@ class RequestsController < ApplicationController
 
   def destroy
     @request = Request.find_by(video: params[:videoKey])
-    if @request.destroy
+    if @request.status = "active"
+      @request.destroy
       @pizzas = Request.total_pizzas_donated
       @donated_pizzas = @pizzas ? @pizzas : 0
       @requests = Request.open_requests
       @thank_yous = ThankYou.activity
-      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, errorMessage: "Request could not be created." }
+      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, errorMessage: "Request was deleted." }
     else
-      render :json => { errorMessage: "Video could not be uploaded, but request could not be deleted." }
+      render :json => { errorMessage: "Request could not be deleted." }
     end
   end
 
