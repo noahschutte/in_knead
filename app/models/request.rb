@@ -102,6 +102,13 @@ class Request < ApplicationRecord
     Request.where(donor_id: user_id).where(status: "active").count > 1 ? true : false
   end
 
+  def self.expire(user_id)
+    Request.where(creator_id: user_id).where(status: "active").map{ |request|
+      request.status = "expired"
+      request.save
+    }
+  end
+
   private
     # def self.get_url(video)
     #   @asset = S3_REQUESTS.object("#{video}")

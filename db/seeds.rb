@@ -30,16 +30,15 @@ users.each do |user|
 end
 
 request1 = {
-  creator: joe,
+  creator: User.find(1),
   pizzas: 2,
   vendor: "Papa Johns",
   video: "1111",
-  donor_id: 3,
   transcoded: true
 }
 
 request2 = {
-  creator: monica,
+  creator: User.find(2),
   pizzas: 1,
   vendor: "Dominos",
   video: "2222",
@@ -47,7 +46,7 @@ request2 = {
 }
 
 request3 = {
-  creator: bob,
+  creator: User.find(3),
   pizzas: 3,
   vendor: "Pizza Hut",
   video: "3333",
@@ -59,7 +58,7 @@ request3 = {
 requests = [request1, request2, request3]
 
 requests.each_with_index do |request, index|
-  Request.create(creator: User.find(index+1), pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id], transcoded: request[:transcoded])
+  Request.create(creator: request[:creator], pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id], transcoded: request[:transcoded])
 end
 
 thankYou1 = {
