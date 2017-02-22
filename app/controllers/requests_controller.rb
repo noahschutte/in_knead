@@ -54,6 +54,8 @@ class RequestsController < ApplicationController
         render :json => { errorMessage: "You have recently made a donation." }
       elsif @request.donor_id != nil
         render :json => { errorMessage: "This request has already received a donation." }
+      elsif Request.donor_fraud(@user.id)
+        render :json => { errorMessage: "Your last donations have not been received yet." }
       elsif @request.update(donor_id: @user.id)
         @requests = Request.open_requests
         @thank_yous = ThankYou.activity
