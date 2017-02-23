@@ -28,7 +28,7 @@ class ThankYouController < ApplicationController
     else
       @donorViewed = ThankYou.find_by(video: params[:viewedVideo])
       @donorViewed.update(donor_viewed: true)
-      render :json => { errorMessage: "success" }
+      render :json => { errorMessage: "Donor has viewed this Thank You video." }
     end
   end
 
