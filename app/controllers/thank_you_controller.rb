@@ -46,7 +46,7 @@ class ThankYouController < ApplicationController
   end
 
   def show
-    @thank_you = ThankYou.find(request[:thank_you_id])
+    @thank_you = ThankYou.find(request[:id])
     render :json => { thankYou: @thank_you }
   end
 
