@@ -20,7 +20,11 @@ class ThankYouController < ApplicationController
   end
 
   def update
-    if params[:report]
+    if params[:transcodedVideo]
+      @transcoded_thank_you = ThankYou.find_by(video: params[:transcodedVideo])
+      @transcoded_thank_you.update(transcoded: true)
+      render :json => { errorMessage: "Thank You updated as transcoded." }
+    elsif params[:report]
       @report_thank_you = ThankYou.find_by(video: params[:report])
       @report_thank_you.increment(:reports)
       @report_thank_you.save
