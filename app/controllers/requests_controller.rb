@@ -81,8 +81,8 @@ class RequestsController < ApplicationController
   end
 
   def destroy
-    @request = Request.find_by(video: params[:videoKey])
-    if @request.status = "active"
+    @request = Request.find(request[:id])
+    if @request.status == "active"
       @request.destroy
       @pizzas = Request.total_pizzas_donated
       @donated_pizzas = @pizzas ? @pizzas : 0

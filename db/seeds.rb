@@ -35,7 +35,8 @@ request1 = {
   vendor: "Papa Johns",
   video: "1111",
   donor_id: 4,
-  transcoded: true
+  transcoded: true,
+  status: "received"
 }
 
 request2 = {
@@ -52,14 +53,15 @@ request3 = {
   vendor: "Pizza Hut",
   video: "3333",
   donor_id: 1,
-  transcoded: true
+  transcoded: true,
+  status: "received"
 }
 
 
 requests = [request1, request2, request3]
 
 requests.each_with_index do |request, index|
-  Request.create(creator: request[:creator], pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id], transcoded: request[:transcoded])
+  Request.create(creator: request[:creator], pizzas: request[:pizzas], vendor: request[:vendor], video: request[:video], donor_id: request[:donor_id], transcoded: request[:transcoded], status: request[:status])
 end
 
 thankYou1 = {
