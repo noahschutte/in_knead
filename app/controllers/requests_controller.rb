@@ -14,7 +14,7 @@ class RequestsController < ApplicationController
   end
 
   def show
-    @request = Request.find(request[:request_id])
+    @request = Request.find(request[:id])
     render :json => { request: @request }
   end
 
