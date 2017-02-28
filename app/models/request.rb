@@ -9,7 +9,7 @@ class Request < ApplicationRecord
     # Request.where("created_at > ?", DateTime.now - 24.hours).order('created_at DESC')
 
     Request.where(transcoded: true).order('created_at DESC').map { |request|
-      seconds = (Time.now() - request.updated_at).round
+      seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
         type: "request",
@@ -29,8 +29,8 @@ class Request < ApplicationRecord
   end
 
   def self.user_history(user_id)
-    Request.where(creator_id: user_id).or(Request.where(donor_id: user_id)).order('updated_at DESC').map { |request|
-      seconds = (Time.now() - request.updated_at).round
+    Request.where(creator_id: user_id).or(Request.where(donor_id: user_id)).order('created_at DESC').map { |request|
+      seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
         type: "request",
@@ -50,8 +50,8 @@ class Request < ApplicationRecord
   end
 
   def self.anon_history(anon_id)
-    Request.where(creator_id: anon_id).or(Request.where(donor_id: anon_id)).order('updated_at DESC').map { |request|
-      seconds = (Time.now() - request.updated_at).round
+    Request.where(creator_id: anon_id).or(Request.where(donor_id: anon_id)).order('created_at DESC').map { |request|
+      seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
         type: "request",
@@ -72,7 +72,7 @@ class Request < ApplicationRecord
 
   def self.show(id)
     @request = Request.find(id)
-    @seconds = (Time.now() - @request.updated_at).round
+    @seconds = (Time.now() - @request.created_at).round
     {
       id: @request.id,
       type: "request",

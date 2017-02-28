@@ -27,7 +27,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.user_history(user_id)
-    ThankYou.where(creator_id: user_id).order('updated_at DESC').map { |thank_you|
+    ThankYou.where(creator_id: user_id).order('created_at DESC').map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
@@ -48,7 +48,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.anon_history(anon_id)
-    ThankYou.where(creator_id: anon_id).order('updated_at DESC').map { |thank_you|
+    ThankYou.where(creator_id: anon_id).order('created_at DESC').map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
