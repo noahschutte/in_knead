@@ -37,7 +37,10 @@ class User < ApplicationRecord
       awaiting_thank_yous = []
       requests.map { |request|
         thank_yous.map { |thank_you|
+          p "request id:" + request.id
+          p "thank you id:" + thank_you.request_id
           if request.id == thank_you.request_id
+            p "match"
             awaiting_thank_yous << request
           end
         }
