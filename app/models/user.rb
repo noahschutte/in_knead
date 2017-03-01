@@ -16,15 +16,33 @@ class User < ApplicationRecord
     end
 
     def self.recent_thank_you(user_id)
-      ThankYou.where(creator: user_id).order('updated_at DESC')[0]
+      ThankYou.where(creator: user_id).order('created_at DESC')[0]
     end
 
+    # Recent donation collects most recently updated request
+      # Updated_at changes with reports
     def self.recent_donation(user_id)
       Request.where(donor_id: user_id).where("updated_at > ?", DateTime.now - 30.minutes)[0]
     end
 
+    # Received thank you only returns 1 and not an array
     def self.received_thank_you(user_id)
       ThankYou.where(donor_id: user_id).where(donor_viewed: false).order('updated_at DESC')[0]
+    end
+
+    # Left Join Requests and ThankYous
+    def self.awaiting_thank_yous(user_id)
+      requests = Requests.where(donor_id: user_id).where(status: "received")
+      thank_yous = ThankYous.where(donor_id: user_id).where(donor_viewed: false)
+      awaiting_thank_yous = []
+      requests.select { |request|
+        thank_yous.map { |thank_you|
+          if request.id == thank_you.request_id
+            awaiting_thank_yous << request
+          end
+        }
+      }
+      return awaiting_thank_yous
     end
 
 end
