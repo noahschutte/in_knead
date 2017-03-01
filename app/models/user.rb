@@ -24,7 +24,7 @@ class User < ApplicationRecord
     end
 
     def self.received_thank_you(user_id)
-      ThankYou.where(donor_id: user_id).order('updated_at DESC')[0]
+      ThankYou.where(donor_id: user_id).where(donor_viewed: false).order('updated_at DESC')[0]
     end
 
 end
