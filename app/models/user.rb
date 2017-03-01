@@ -34,7 +34,7 @@ class User < ApplicationRecord
     def self.awaiting_thank_yous(user_id)
       requests = Request.where(donor_id: user_id).where(status: "received")
       thank_yous = ThankYou.where(donor_id: user_id).where(donor_viewed: false)
-      requests.delete_if { |request|
+      requests.reject! { |request|
         thank_yous.map { |thank_you|
           p "request id:"
           p request.id
