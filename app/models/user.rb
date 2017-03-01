@@ -34,18 +34,27 @@ class User < ApplicationRecord
     def self.awaiting_thank_yous(user_id)
       requests = Request.where(donor_id: user_id).where(status: "received")
       thank_yous = ThankYou.where(donor_id: user_id).where(donor_viewed: false)
-      requests.reject! { |request|
-        thank_yous.map { |thank_you|
+      awaiting_thank_yous = []
+      requests.each { |request|
+        match = false
+        thank_yous.each { |thank_you|
           p "request id:"
           p request.id
           p "thank you id:"
           p thank_you.request_id
-          request.id == thank_you.request_id
+          if request.id == thank_you.request_id
+            p "match true"
+            match = true
+          end
         }
+        if match = false
+          "no match"
+          awaiting_thank_yous << request
+        end
       }
-      p "requests"
-      p requests
-      return requests
+      p "awaiting_thank_yous"
+      p awaiting_thank_yous
+      return awaiting_thank_yous
     end
 
 end
