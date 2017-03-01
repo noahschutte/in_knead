@@ -35,7 +35,7 @@ class User < ApplicationRecord
       requests = Requests.where(donor_id: user_id).where(status: "received")
       thank_yous = ThankYous.where(donor_id: user_id).where(donor_viewed: false)
       awaiting_thank_yous = []
-      requests.select { |request|
+      requests.map { |request|
         thank_yous.map { |thank_you|
           if request.id == thank_you.request_id
             awaiting_thank_yous << request
