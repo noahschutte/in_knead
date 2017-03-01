@@ -32,8 +32,8 @@ class User < ApplicationRecord
 
     # Left Join Requests and ThankYous
     def self.awaiting_thank_yous(user_id)
-      requests = Requests.where(donor_id: user_id).where(status: "received")
-      thank_yous = ThankYous.where(donor_id: user_id).where(donor_viewed: false)
+      requests = Request.where(donor_id: user_id).where(status: "received")
+      thank_yous = ThankYou.where(donor_id: user_id).where(donor_viewed: false)
       awaiting_thank_yous = []
       requests.map { |request|
         thank_yous.map { |thank_you|
