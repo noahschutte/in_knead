@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     else
       @recent_thank_you = nil
     end
-    if @user && User.awaiting_thank_yous(@user.id)
+    if @user
       @awaiting_thank_yous = User.awaiting_thank_yous(@user.id)
     else
       @awaiting_thank_yous = []
