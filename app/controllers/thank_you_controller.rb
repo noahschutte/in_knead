@@ -1,7 +1,7 @@
 class ThankYouController < ApplicationController
 
   def create
-    @user = User.find(request[:userID])
+    @user = User.find(params[:userID])
     @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey])
     if @thank_you.save
       @signed_request = set_presigned_put_url(@thank_you.video)

@@ -1,9 +1,9 @@
 class Request < ApplicationRecord
 
-    validates_presence_of :creator, :pizzas, :vendor, :video
+  validates_presence_of :creator, :pizzas, :vendor, :video
 
-    belongs_to :creator, class_name: "User", foreign_key: :creator_id
-    has_one :thank_you, class_name: "ThankYou", foreign_key: :request_id
+  belongs_to :creator, class_name: "User", foreign_key: :creator_id
+  has_one :thank_you, class_name: "ThankYou", foreign_key: :request_id
 
   def self.activity
     Request.where(transcoded: true).map { |request|

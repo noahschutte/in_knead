@@ -12,19 +12,20 @@ class RequestsController < ApplicationController
   end
 
   def create
-    @user = User.find(request[:userID])
+    @user = User.find(params[:userID])
     if User.recent_successful_request(@user.id)
       render :json => { errorMessage: "You must wait 14 days after receiving a donation." }
     elsif User.recent_request(@user.id)
       render :json => { errorMessage: "You can only make a request once every 24 hours." }
-    end
-    Request.expire(@user.id)
-    @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
-    if @request.save
-      @signed_request = set_presigned_put_url(@request.video)
-      render :json => { signedRequest: @signed_request }
     else
-      render :json => { errorMessage: "Request could not be created." }
+      Request.expire(@user.id)
+      @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
+      if @request.save
+        @signed_request = set_presigned_put_url(@request.video)
+        render :json => { signedRequest: @signed_request }
+      else
+        render :json => { errorMessage: "Request could not be created." }
+      end
     end
   end
 
@@ -39,7 +40,7 @@ class RequestsController < ApplicationController
       @report_request.save
       render :status => :ok
     else
-      @request = Request.find(params[:id])
+      @request = Request.find(request[:id])
       @user = User.find(params[:userID])
       if params[:receivedDonation] && @request.update(status: "received")
         render :status => :ok
