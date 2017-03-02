@@ -34,28 +34,15 @@ class UsersController < ApplicationController
       end
     end
 
-    # Remove user and signupEmail?
-    render :json => {
-      user: @user,
-      signupEmail: @user.signup_email,
-      currentEmail: @user.current_email,
-    }
+    render :json => { user: @user }
   end
 
   def update
     @user = User.find(request[:id])
     if @user.update(current_email: params[:updatedEmail])
-      # Remove user and signupEmail?
-      render :json => {
-        user: @user,
-        signupEmail: @user.signup_email,
-        currentEmail: @user.current_email,
-        errorMessage: "Your email was successfully updated."
-      }
+      render :json => { errorMessage: "Your email was successfully updated." }
     else
-      render :json => {
-        errorMessage: "Your email was not updated.\nPlease enter a valid email address."
-      }
+      render :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
     end
   end
 

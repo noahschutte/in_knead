@@ -1,11 +1,5 @@
 class ThankYouController < ApplicationController
 
-  # Can I remove the show route?
-  def show
-    @thank_you = ThankYou.find(request[:id])
-    render :json => { thankYou: @thank_you }
-  end
-
   def create
     @user = User.find(request[:userID])
     @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
@@ -15,7 +9,7 @@ class ThankYouController < ApplicationController
 
       render :json => {
         signedRequest: @signed_request,
-        recentThankYou: @thank_you
+        errorMessage: "Thank You entry was created"
       }
     else
       render :json => { errorMessage: "Thank You was not created." }
@@ -27,25 +21,22 @@ class ThankYouController < ApplicationController
       @transcoded_thank_you = ThankYou.find_by(video: params[:transcodedVideo])
       @transcoded_thank_you.update(transcoded: true)
       render :json => { errorMessage: "Thank You updated as transcoded." }
-
-    # Is the front end able to send me the videoKey?
     elsif params[:reportVideo]
-      @report_thank_you = ThankYou.find_by(video: params[:reportVideo])
+      @report_thank_you = ThankYou.find(request[:id])
       @report_thank_you.increment(:reports)
       @report_thank_you.save
       render :json => { errorMessage: "Thank You has been reported." }
     elsif params[:viewedVideo]
-      @donorViewed = ThankYou.find_by(video: params[:viewedVideo])
-      @donorViewed.update(donor_viewed: true)
+      @donorViewedThankYou = ThankYou.find(request[:id])
+      @donorViewedThankYou.update(donor_viewed: true)
       render :json => { errorMessage: "Donor has viewed this Thank You video." }
     end
   end
 
   def destroy
-    # Is the front end able to send me the videoKey?
-    @thank_you = ThankYou.find_by(video: params[:videoKey])
+    @thank_you = ThankYou.find(request[:id])
     if @thank_you.destroy
-      render :json => { errorMessage: "Thank You entry was destroyed." }
+      render :json => { errorMessage: "Thank You entry was deleted." }
     else
       render :json => { errorMessage: "Thank You entry could not be deleted." }
     end

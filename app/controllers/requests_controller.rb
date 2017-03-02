@@ -1,5 +1,4 @@
 class RequestsController < ApplicationController
-  # before_action :set_s3_direct_post, only: [:index, :show, :create, :update]
 
   def index
     @total_donated_pizzas = Request.total_donated_pizzas
@@ -13,12 +12,6 @@ class RequestsController < ApplicationController
     }
   end
 
-  # Can I remove the show route?
-  def show
-    @request = Request.find(request[:id])
-    render :json => { request: @request }
-  end
-
   def create
     @user = User.find(request[:userID])
     if User.recent_successful_request(@user.id)
@@ -30,9 +23,7 @@ class RequestsController < ApplicationController
     @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
     if @request.save
       @signed_request = set_presigned_put_url(@request.video)
-      render :json => {
-        signedRequest: @signed_request
-      }
+      render :json => { signedRequest: @signed_request }
     else
       render :json => { errorMessage: "Request could not be created." }
     end
@@ -44,7 +35,7 @@ class RequestsController < ApplicationController
       @transcoded_request.update(transcoded: true)
       render :json => { errorMessage: "Request updated as transcoded." }
     elsif params[:reportVideo]
-      @report_request = Request.find_by(video: params[:reportVideo])
+      @report_request = Request.find(request[:id])
       @report_request.increment(:reports)
       @report_request.save
       render :json => { errorMessage: "Request has been reported." }
@@ -60,16 +51,11 @@ class RequestsController < ApplicationController
       elsif Request.donor_fraud(@user.id)
         render :json => { errorMessage: "Your last donations have not been received yet." }
       elsif @request.update(donor_id: @user.id)
-        # Can I just render success message instead of returning anything else?
-        @anon = User.find(@request.creator_id)
-        @anon_email = @anon.current_email
-        # Remove @request_show?
         @request_show = Request.show(@request.id)
 
-        # Remove request?
         render :json => {
           request: @request_show,
-          anonEmail: @anon_email
+          errorMessage: "You've successfully donated to this request."
         }
       else
         render :json => { errorMessage: "Cannot donate at this time." }
