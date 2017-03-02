@@ -11,17 +11,17 @@ class Request < ApplicationRecord
       {
         id: request.id,
         type: "request",
-        creator_id: request.creator_id,
+        creatorId: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
-        compressed_video: get_compressed_url(request.video),
+        compressedVideo: get_compressed_url(request.video),
         thumbnail: get_thumbnail_url(request.video),
-        donor_id: request.donor_id,
+        donorId: request.donor_id,
         seconds: seconds,
         status: request.status,
         reports: request.reports,
-        created_at: request.created_at,
-        updated_at: request.updated_at
+        createdAt: request.created_at,
+        updatedAt: request.updated_at
       }
     }
   end
@@ -32,17 +32,17 @@ class Request < ApplicationRecord
       {
         id: request.id,
         type: "request",
-        creator_id: request.creator_id,
+        creatorId: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
-        compressed_video: get_compressed_url(request.video),
+        compressedVideo: get_compressed_url(request.video),
         thumbnail: get_thumbnail_url(request.video),
-        donor_id: request.donor_id,
+        donorId: request.donor_id,
         seconds: seconds,
         status: request.status,
         reports: request.reports,
-        created_at: request.created_at,
-        updated_at: request.updated_at
+        createdAt: request.created_at,
+        updatedAt: request.updated_at
       }
     }
   end
@@ -53,17 +53,17 @@ class Request < ApplicationRecord
       {
         id: request.id,
         type: "request",
-        creator_id: request.creator_id,
+        creatorId: request.creator_id,
         pizzas: request.pizzas,
         vendor: request.vendor,
-        compressed_video: get_compressed_url(request.video),
+        compressedVideo: get_compressed_url(request.video),
         thumbnail: get_thumbnail_url(request.video),
-        donor_id: request.donor_id,
+        donorId: request.donor_id,
         seconds: seconds,
         status: request.status,
         reports: request.reports,
-        created_at: request.created_at,
-        updated_at: request.updated_at
+        createdAt: request.created_at,
+        updatedAt: request.updated_at
       }
     }
   end
@@ -75,18 +75,18 @@ class Request < ApplicationRecord
     {
       id: request.id,
       type: "request",
-      creator_id: request.creator_id,
-      anon_email: anon_email,
+      creatorId: request.creator_id,
+      anonEmail: anon_email,
       pizzas: request.pizzas,
       vendor: request.vendor,
-      compressed_video: get_compressed_url(request.video),
+      compressedVideo: get_compressed_url(request.video),
       thumbnail: get_thumbnail_url(request.video),
-      donor_id: request.donor_id,
+      donorId: request.donor_id,
       seconds: seconds,
       status: request.status,
       reports: request.reports,
-      created_at: request.created_at,
-      updated_at: request.updated_at
+      createdAt: request.created_at,
+      updatedAt: request.updated_at
     }
   end
 

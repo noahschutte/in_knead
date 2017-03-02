@@ -11,18 +11,18 @@ class ThankYou < ApplicationRecord
       {
         id: thank_you.id,
         type: "thankYou",
-        creator_id: thank_you.creator_id,
-        donor_id: thank_you.donor_id,
-        request_id: thank_you.request_id,
+        creatorId: thank_you.creator_id,
+        donorId: thank_you.donor_id,
+        requestId: thank_you.request_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
-        compressed_video: get_compressed_url(thank_you.video),
+        compressedVideo: get_compressed_url(thank_you.video),
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
         reports: thank_you.reports,
-        donor_viewed: thank_you.donor_viewed,
-        created_at: thank_you.created_at,
-        updated_at: thank_you.updated_at
+        donorViewed: thank_you.donor_viewed,
+        createdAt: thank_you.created_at,
+        updatedAt: thank_you.updated_at
       }
     }
   end
@@ -33,18 +33,18 @@ class ThankYou < ApplicationRecord
       {
         id: thank_you.id,
         type: "thankYou",
-        creator_id: thank_you.creator_id,
-        donor_id: thank_you.donor_id,
-        request_id: thank_you.request_id,
+        creatorId: thank_you.creator_id,
+        donorId: thank_you.donor_id,
+        requestId: thank_you.request_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
-        compressed_video: get_compressed_url(thank_you.video),
+        compressedVideo: get_compressed_url(thank_you.video),
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
         reports: thank_you.reports,
-        donor_viewed: thank_you.donor_viewed,
-        created_at: thank_you.created_at,
-        updated_at: thank_you.updated_at
+        donorViewed: thank_you.donor_viewed,
+        createdAt: thank_you.created_at,
+        updatedAt: thank_you.updated_at
       }
     }
   end
@@ -55,18 +55,18 @@ class ThankYou < ApplicationRecord
       {
         id: thank_you.id,
         type: "thankYou",
-        creator_id: thank_you.creator_id,
-        donor_id: thank_you.donor_id,
-        request_id: thank_you.request_id,
+        creatorId: thank_you.creator_id,
+        donorId: thank_you.donor_id,
+        requestId: thank_you.request_id,
         pizzas: thank_you.pizzas,
         vendor: thank_you.vendor,
-        compressed_video: get_compressed_url(thank_you.video),
+        compressedVideo: get_compressed_url(thank_you.video),
         thumbnail: get_thumbnail_url(thank_you.video),
         seconds: seconds,
         reports: thank_you.reports,
-        donor_viewed: thank_you.donor_viewed,
-        created_at: thank_you.created_at,
-        updated_at: thank_you.updated_at
+        donorViewed: thank_you.donor_viewed,
+        createdAt: thank_you.created_at,
+        updatedAt: thank_you.updated_at
       }
     }
   end

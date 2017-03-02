@@ -4,7 +4,6 @@ class RequestsController < ApplicationController
     @total_donated_pizzas = Request.total_donated_pizzas
     @requests = Request.activity
     @thank_yous = ThankYou.activity
-
     render :json => {
       totalDonatedPizzas: @total_donated_pizzas,
       requests: @requests,
@@ -33,17 +32,17 @@ class RequestsController < ApplicationController
     if params[:transcodedVideo]
       @transcoded_request = Request.find_by(video: params[:transcodedVideo])
       @transcoded_request.update(transcoded: true)
-      render :json => { errorMessage: "Request updated as transcoded." }
+      render :status => :ok
     elsif params[:reportVideo]
       @report_request = Request.find(request[:id])
       @report_request.increment(:reports)
       @report_request.save
-      render :json => { errorMessage: "Request has been reported." }
+      render :status => :ok
     else
       @request = Request.find(params[:id])
       @user = User.find(params[:userID])
       if params[:receivedDonation] && @request.update(status: "received")
-        render :json => { errorMessage: "Request marked as received." }
+        render :status => :ok
       elsif User.recent_donation(@user.id)
         render :json => { errorMessage: "You have recently made a donation." }
       elsif @request.donor_id != nil
@@ -52,11 +51,7 @@ class RequestsController < ApplicationController
         render :json => { errorMessage: "Your last donations have not been received yet." }
       elsif @request.update(donor_id: @user.id)
         @request_show = Request.show(@request.id)
-
-        render :json => {
-          request: @request_show,
-          errorMessage: "You've successfully donated to this request."
-        }
+        render :json => { request: @request_show }
       else
         render :json => { errorMessage: "Cannot donate at this time." }
       end
@@ -67,7 +62,7 @@ class RequestsController < ApplicationController
     @request = Request.find(request[:id])
     if @request.status == "active" && @request.donor_id == nil
       @request.destroy
-      render :json => { errorMessage: "Request was deleted." }
+      render :status => :ok
     else
       render :json => { errorMessage: "Request could not be deleted." }
     end
@@ -84,4 +79,5 @@ class RequestsController < ApplicationController
       # p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
       # @put_url
     end
+
 end
