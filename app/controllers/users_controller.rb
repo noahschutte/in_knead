@@ -23,16 +23,20 @@ class UsersController < ApplicationController
   end
 
   def create
-    @email = request[:userInfo][:email]
-    @fb_userID = request[:userInfo][:id]
+    # Did I fuck shit up with params instead of request[:userInfo]?
+    @email = params[:userInfo][:email]
+    @fb_userID = params[:userInfo][:id]
     @user = User.find_by(fb_userID: @fb_userID)
     if !@user
       @user = User.new(fb_userID: @fb_userID, signup_email: @email)
       if !@user.save
         render :json => { errorMessage: "User could not be created in database." }
+      else
+        render :json => { user: @user }
       end
+    else
+      render :json => { user: @user }
     end
-    render :json => { user: @user }
   end
 
   def update

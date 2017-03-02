@@ -44,7 +44,8 @@ request2 = {
   pizzas: 1,
   vendor: "Dominos",
   video: "2222",
-  transcoded: true
+  transcoded: true,
+  status: "active"
 }
 
 request3 = {
