@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
 
   def show
-    @user_id = User.find(request[:id]).id
+    @user = User.find(request[:id])
+    @user_id = @user.id
     @user_requests = Request.user_history(@user_id)
     @user_thank_yous = ThankYou.user_history(@user_id)
     @recent_successful_requests = User.recent_successful_requests(@user_id)
@@ -14,7 +15,7 @@ class UsersController < ApplicationController
       userRequests: @user_requests,
       userThankYous: @user_thank_yous,
       recentSuccessfulRequests: @recent_successful_requests,
-      thankYouReminders: @thank_you_reminders
+      thankYouReminders: @thank_you_reminders,
       recentDonations: @recent_donations,
       awaitingThankYous: @awaiting_thank_yous,
       receivedThankYous: @received_thank_yous
