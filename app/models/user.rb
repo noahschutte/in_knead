@@ -26,7 +26,26 @@ class User < ApplicationRecord
     end
 
     def self.recent_donations(user_id)
-      Request.where(donor_id: user_id).where.not(status: "received")
+      Request.where(donor_id: user_id).where.not(status: "received").map { |request|
+        anon_email = User.find(request.creator_id).current_email
+        seconds = (Time.now() - request.created_at).round
+        {
+          id: request.id,
+          type: "request",
+          creator_id: request.creator_id,
+          anon_email: anon_email,
+          pizzas: request.pizzas,
+          vendor: request.vendor,
+          compressed_video: get_compressed_url(request.video),
+          thumbnail: get_thumbnail_url(request.video),
+          donor_id: request.donor_id,
+          seconds: seconds,
+          status: request.status,
+          reports: request.reports,
+          created_at: request.created_at,
+          updated_at: request.updated_at
+        }
+      }
     end
 
     # Requests you've received but have not sent a Thank You for
