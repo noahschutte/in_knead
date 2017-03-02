@@ -2,17 +2,18 @@ class RequestsController < ApplicationController
   # before_action :set_s3_direct_post, only: [:index, :show, :create, :update]
 
   def index
-    @pizzas = Request.total_pizzas_donated
-    @donated_pizzas = @pizzas ? @pizzas : 0
-    @requests = Request.open_requests
+    @total_donated_pizzas = Request.total_donated_pizzas
+    @requests = Request.activity
     @thank_yous = ThankYou.activity
-    if @requests.any? || @thank_yous.any?
-      render :json => { totalDonatedPizzas: @donated_pizzas, requests: @requests, thankYous: @thank_yous }
-    else
-      render :json => { totalDonatedPizzas: @donated_pizzas,  errorMessage: 'No current requests.', url: @url }
-    end
+
+    render :json => {
+      totalDonatedPizzas: @total_donated_pizzas,
+      requests: @requests,
+      thankYous: @thank_yous
+    }
   end
 
+  # Can I remove the show route?
   def show
     @request = Request.find(request[:id])
     render :json => { request: @request }
@@ -20,25 +21,20 @@ class RequestsController < ApplicationController
 
   def create
     @user = User.find(request[:userID])
-    @recent_successful_request = User.recent_successful_request(@user.id)
-    @recent_request = User.recent_request(@user.id)
-    if @recent_successful_request
+    if User.recent_successful_request(@user.id)
       render :json => { errorMessage: "You must wait 14 days after receiving a donation." }
-    elsif @recent_request
+    elsif User.recent_request(@user.id)
       render :json => { errorMessage: "You can only make a request once every 24 hours." }
+    end
+    Request.expire(@user.id)
+    @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
+    if @request.save
+      @signed_request = set_presigned_put_url(@request.video)
+      render :json => {
+        signedRequest: @signed_request
+      }
     else
-      Request.expire(@user.id)
-      @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
-      if @request.save
-        @pizzas = Request.total_pizzas_donated
-        @donated_pizzas = @pizzas ? @pizzas : 0
-        @requests = Request.open_requests
-        @thank_yous = ThankYou.activity
-        @signed_request = set_presigned_put_url(@request.video)
-        render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, signedRequest: @signed_request }
-      else
-        render :json => { errorMessage: "Request could not be created." }
-      end
+      render :json => { errorMessage: "Request could not be created." }
     end
   end
 
@@ -47,8 +43,8 @@ class RequestsController < ApplicationController
       @transcoded_request = Request.find_by(video: params[:transcodedVideo])
       @transcoded_request.update(transcoded: true)
       render :json => { errorMessage: "Request updated as transcoded." }
-    elsif params[:report]
-      @report_request = Request.find_by(video: params[:report])
+    elsif params[:reportVideo]
+      @report_request = Request.find_by(video: params[:reportVideo])
       @report_request.increment(:reports)
       @report_request.save
       render :json => { errorMessage: "Request has been reported." }
@@ -56,24 +52,25 @@ class RequestsController < ApplicationController
       @request = Request.find(params[:id])
       @user = User.find(params[:userID])
       if params[:receivedDonation] && @request.update(status: "received")
-        @recent_successful_request = User.recent_successful_request(@user.id)
-        render :json => { recentSuccessfulRequest: @recent_successful_request }
-      elsif Request.active_donation(@user)
+        render :json => { errorMessage: "Request marked as received." }
+      elsif User.recent_donation(@user.id)
         render :json => { errorMessage: "You have recently made a donation." }
       elsif @request.donor_id != nil
         render :json => { errorMessage: "This request has already received a donation." }
       elsif Request.donor_fraud(@user.id)
         render :json => { errorMessage: "Your last donations have not been received yet." }
       elsif @request.update(donor_id: @user.id)
-        @requests = Request.open_requests
-        @thank_yous = ThankYou.activity
-        @pizzas = Request.total_pizzas_donated
-        @active_donation = Request.active_donation(@user)
+        # Can I just render success message instead of returning anything else?
         @anon = User.find(@request.creator_id)
         @anon_email = @anon.current_email
+        # Remove @request_show?
         @request_show = Request.show(@request.id)
 
-        render :json => { totalDonatedPizzas: @pizzas, request: @request_show, requests: @requests, thankYous: @thank_yous, activeDonation: @active_donation, anonEmail: @anon_email }
+        # Remove request?
+        render :json => {
+          request: @request_show,
+          anonEmail: @anon_email
+        }
       else
         render :json => { errorMessage: "Cannot donate at this time." }
       end
@@ -82,13 +79,9 @@ class RequestsController < ApplicationController
 
   def destroy
     @request = Request.find(request[:id])
-    if @request.status == "active"
+    if @request.status == "active" && @request.donor_id == nil
       @request.destroy
-      @pizzas = Request.total_pizzas_donated
-      @donated_pizzas = @pizzas ? @pizzas : 0
-      @requests = Request.open_requests
-      @thank_yous = ThankYou.activity
-      render :json => { requests: @requests, thankYous: @thank_yous, totalDonatedPizzas: @donated_pizzas, errorMessage: "Request was deleted." }
+      render :json => { errorMessage: "Request was deleted." }
     else
       render :json => { errorMessage: "Request could not be deleted." }
     end
@@ -99,10 +92,10 @@ class RequestsController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{object_name}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      p "@put_url"
-      p @put_url
-      p "sub"
-      p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
-      @put_url
+      # p "@put_url"
+      # p @put_url
+      # p "sub"
+      # p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
+      # @put_url
     end
 end
