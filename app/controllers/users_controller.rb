@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     if !@user
       @user = User.new(fb_userID: @fb_userID, signup_email: @email)
       if !@user.save
-        render :json => { errorMessage: "Cannot log in" }
+        render :json => { errorMessage: "User could not be created in database." }
       end
     end
     render :json => { user: @user }

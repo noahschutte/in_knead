@@ -7,7 +7,7 @@ class ThankYouController < ApplicationController
       @signed_request = set_presigned_put_url(@thank_you.video)
       render :json => { signedRequest: @signed_request }
     else
-      render :json => { errorMessage: "Thank You was not created." }
+      render :json => { errorMessage: "Thank You could not be created." }
     end
   end
 
