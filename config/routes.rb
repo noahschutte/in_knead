@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
-  resources :requests
-  resources :users
-  resources :anon
-  resources :thank_you
+  resources :users, only: [:show, :create, :update]
+  resources :requests, only: [:index, :create, :update, :destroy]
+  resources :thank_you, only: [:create, :update, :destroy]
+  resources :anon, only: [:show]
 
 end
