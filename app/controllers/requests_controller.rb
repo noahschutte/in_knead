@@ -62,26 +62,12 @@ class RequestsController < ApplicationController
   end
 
   def destroy
-    p "destroy request route"
-    p params
-    p request
-    p params[:failedTranscoding]
-    if params[:failedTranscoding]
-      @request = Request.find_by(video: params[:failedTranscoding])
-      @request.destroy
-      render :status => :ok
-    elsif params[:failedTranscodedPatch]
-      @request = Request.find_by(video: params[:failedTranscodedPatch])
+    @request = Request.find(request[:id])
+    if @request.status == "active" && @request.donor_id == nil
       @request.destroy
       render :status => :ok
     else
-      @request = Request.find(request[:id])
-      if @request.status == "active" && @request.donor_id == nil
-        @request.destroy
-        render :status => :ok
-      else
-        render :json => { errorMessage: "Request could not be deleted." }
-      end
+      render :json => { errorMessage: "Request could not be deleted." }
     end
   end
 
