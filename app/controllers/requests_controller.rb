@@ -62,6 +62,10 @@ class RequestsController < ApplicationController
   end
 
   def destroy
+    p "destroy request route"
+    p params
+    p request
+    p params[:failedTranscoding]
     if params[:failedTranscoding]
       @request = Request.find_by(video: params[:failedTranscoding])
       @request.destroy
