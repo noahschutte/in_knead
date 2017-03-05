@@ -13,7 +13,9 @@ class RequestsController < ApplicationController
 
   def create
     @user = User.find(params[:userID])
-    if User.recent_successful_request(@user.id)
+    if User.thank_you_reminders(@user.id).any?
+      render :json => { errorMessage: "Please submit a thank you video for your previously successful requests." }
+    elsif User.recent_successful_request(@user.id)
       render :json => { errorMessage: "You must wait 14 days after receiving a donation." }
     elsif User.recent_request(@user.id)
       render :json => { errorMessage: "You can only make a request once every 24 hours." }
