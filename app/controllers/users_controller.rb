@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     if @user.update(current_email: params[:updatedEmail])
       render :status => :ok
     else
-      render :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
+      render :status => 400, :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
     end
   end
 
