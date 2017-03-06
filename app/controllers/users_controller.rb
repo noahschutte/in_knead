@@ -23,7 +23,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    # Did I fuck shit up with params instead of request[:userInfo]?
     @email = params[:userInfo][:email]
     @fb_userID = params[:userInfo][:id]
     @user = User.find_by(fb_userID: @fb_userID)

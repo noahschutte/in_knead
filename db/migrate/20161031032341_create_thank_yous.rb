@@ -6,7 +6,7 @@ class CreateThankYous < ActiveRecord::Migration[5.0]
       t.integer :donor_id, null: false
       t.integer :pizzas, null: false
       t.string :vendor, null: false
-      t.string :video, null: false
+      t.string :video
       t.integer :reports, default: 0
       t.boolean :donor_viewed, default: false
       t.boolean :transcoded, default: false

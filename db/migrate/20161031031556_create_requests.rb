@@ -4,7 +4,7 @@ class CreateRequests < ActiveRecord::Migration[5.0]
       t.references :creator, null: false, index: true
       t.integer :pizzas, null: false
       t.string :vendor, null: false
-      t.string :video, null: false
+      t.string :video
       t.integer :donor_id
       t.string :status, default: "active"
       t.integer :reports, default: 0

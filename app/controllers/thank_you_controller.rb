@@ -2,8 +2,9 @@ class ThankYouController < ApplicationController
 
   def create
     @user = User.find(params[:userID])
-    @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey])
+    @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor])
     if @thank_you.save
+      @thank_you.update(video: params[:videoKey] + "-" + @thank_you.id)
       @signed_request = set_presigned_put_url(@thank_you.video)
       render :json => { signedRequest: @signed_request }
     else
