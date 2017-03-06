@@ -7,7 +7,7 @@ class ThankYouController < ApplicationController
       @signed_request = set_presigned_put_url(@thank_you.video)
       render :json => { signedRequest: @signed_request }
     else
-      render :json => { errorMessage: "Thank You could not be created." }
+      render :status => 400, :json => { errorMessage: "Thank You could not be created." }
     end
   end
 
@@ -33,7 +33,7 @@ class ThankYouController < ApplicationController
     if @thank_you.destroy
       render :status => :ok
     else
-      render :json => { errorMessage: "Thank You entry could not be deleted." }
+      render :status => 400, :json => { errorMessage: "Thank You entry could not be deleted." }
     end
   end
 

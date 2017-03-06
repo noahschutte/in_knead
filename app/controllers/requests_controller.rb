@@ -14,11 +14,11 @@ class RequestsController < ApplicationController
   def create
     @user = User.find(params[:userID])
     if User.thank_you_reminders(@user.id).any?
-      render :json => { errorMessage: "Please submit a thank you video for your previously successful requests." }
+      render :status => 400, :json => { errorMessage: "Please submit a thank you video for your previously successful requests." }
     elsif User.recent_successful_request(@user.id)
-      render :json => { errorMessage: "You must wait 14 days after receiving a donation." }
+      render :status => 400, :json => { errorMessage: "You must wait 14 days after receiving a donation." }
     elsif User.recent_request(@user.id)
-      render :json => { errorMessage: "You can only make a request once every 24 hours." }
+      render :status => 400, :json => { errorMessage: "You can only make a request once every 24 hours." }
     else
       Request.expire(@user.id)
       @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
@@ -26,7 +26,7 @@ class RequestsController < ApplicationController
         @signed_request = set_presigned_put_url(@request.video)
         render :json => { signedRequest: @signed_request }
       else
-        render :json => { errorMessage: "Request could not be created." }
+        render :status => 400, :json => { errorMessage: "Request could not be created." }
       end
     end
   end
@@ -47,16 +47,16 @@ class RequestsController < ApplicationController
       if params[:receivedDonation] && @request.update(status: "received")
         render :status => :ok
       elsif User.recent_donation(@user.id)
-        render :json => { errorMessage: "You have recently made a donation." }
+        render :status => 400, :json => { errorMessage: "You have recently made a donation." }
       elsif @request.donor_id != nil
-        render :json => { errorMessage: "This request has already received a donation." }
+        render :status => 400, :json => { errorMessage: "This request has already received a donation." }
       elsif Request.donor_fraud(@user.id)
-        render :json => { errorMessage: "Your last donations have not been received yet." }
+        render :status => 400, :json => { errorMessage: "Your last donations have not been received yet." }
       elsif @request.update(donor_id: @user.id)
         @request_show = Request.show(@request.id)
         render :json => { request: @request_show }
       else
-        render :json => { errorMessage: "Cannot donate at this time." }
+        render :status => 400, :json => { errorMessage: "Cannot donate at this time." }
       end
     end
   end
