@@ -4,9 +4,10 @@ class ThankYouController < ApplicationController
     @user = User.find(params[:userID])
     @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor])
     if @thank_you.save
-      @thank_you.update(video: params[:videoKey] + "-" + @thank_you.id)
+      new_video_key = params[:videoKey] + "-" + @thank_you.id.to_s
+      @thank_you.update(video: new_video_key)
       @signed_request = set_presigned_put_url(@thank_you.video)
-      render :json => { signedRequest: @signed_request }
+      render :json => { signedRequest: @signed_request, videoKey: @thank_you.video }
     else
       render :status => 400, :json => { errorMessage: "Thank You could not be created." }
     end
