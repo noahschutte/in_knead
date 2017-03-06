@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20161031032341) do
     t.integer  "creator_id",                    null: false
     t.integer  "pizzas",                        null: false
     t.string   "vendor",                        null: false
-    t.string   "video",                         null: false
+    t.string   "video"
     t.integer  "donor_id"
     t.string   "status",     default: "active"
     t.integer  "reports",    default: 0
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20161031032341) do
     t.integer  "donor_id",                     null: false
     t.integer  "pizzas",                       null: false
     t.string   "vendor",                       null: false
-    t.string   "video",                        null: false
+    t.string   "video"
     t.integer  "reports",      default: 0
     t.boolean  "donor_viewed", default: false
     t.boolean  "transcoded",   default: false

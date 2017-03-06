@@ -21,10 +21,20 @@ class RequestsController < ApplicationController
       render :status => 400, :json => { errorMessage: "You can only make a request once every 24 hours." }
     else
       Request.expire(@user.id)
-      @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor], video: params[:videoKey] )
+      @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor])
+      p "@request"
+      p @request
       if @request.save
+        p "request was saved:"
+        p @request
+        p "video key + - + @request.id"
+        new_video_key = params[:videoKey] + "-" + @request.id
+        p new_video_key
+        @request.update(video: new_video_key)
+        p "request was updated"
+        p @request
         @signed_request = set_presigned_put_url(@request.video)
-        render :json => { signedRequest: @signed_request }
+        render :json => { signedRequest: @signed_request, videoKey: @request.video }
       else
         render :status => 400, :json => { errorMessage: "Request could not be created." }
       end
