@@ -67,7 +67,7 @@ class RequestsController < ApplicationController
       @request.destroy
       render :status => :ok
     else
-      render :json => { errorMessage: "Request could not be deleted." }
+      render :status => 400, :json => { errorMessage: "Request could not be deleted." }
     end
   end
 
