@@ -22,20 +22,9 @@ class RequestsController < ApplicationController
     else
       Request.expire(@user.id)
       @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor])
-      p "@request"
-      p @request
       if @request.save
-        p "request was saved:"
-        p @request
-        p "params videoKey"
-        p params[:videoKey]
-        p @request.id.to_s
-        p "video key + - + @request.id"
         new_video_key = params[:videoKey] + "-" + @request.id.to_s
-        p new_video_key
         @request.update(video: new_video_key)
-        p "request was updated"
-        p @request
         @signed_request = set_presigned_put_url(@request.video)
         render :json => { signedRequest: @signed_request, videoKey: @request.video }
       else
