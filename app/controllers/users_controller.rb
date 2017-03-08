@@ -3,8 +3,6 @@ class UsersController < ApplicationController
   def show
     @user = User.find(request[:id])
     @user_id = @user.id
-    @user_requests = Request.user_history(@user_id)
-    @user_thank_yous = ThankYou.user_history(@user_id)
     @recent_successful_requests = User.recent_successful_requests(@user_id)
     @thank_you_reminders = User.thank_you_reminders(@user_id)
     @recent_donations = User.recent_donations(@user_id)
@@ -12,8 +10,7 @@ class UsersController < ApplicationController
     @received_thank_yous = User.received_thank_yous(@user_id)
     render :json => {
       currentEmail: @user.current_email,
-      userRequests: @user_requests,
-      userThankYous: @user_thank_yous,
+      signupEmail: @user.signup_email,
       recentSuccessfulRequests: @recent_successful_requests,
       thankYouReminders: @thank_you_reminders,
       recentDonations: @recent_donations,
