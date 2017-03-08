@@ -10,7 +10,7 @@ To bring people together through pizza.
 https://github.com/JamoWelling
 
 #### Noah Schutte
-https://github.com/noahschutte
+https://github.com/NoahSchutte
 
 ## Contact Us with feedback or appreciation
 jamowelling@gmail.com
