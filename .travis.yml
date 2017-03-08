@@ -1,0 +1,5 @@
+language: ruby
+rvm:
+  - 2.2.2
+before_script:
+  - psql -c "CREATE USER noahschutte WITH PASSWORD 'noahschutte';" -U postgres
