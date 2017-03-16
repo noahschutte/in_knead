@@ -23,8 +23,7 @@ class RequestsController < ApplicationController
       Request.expire(@user.id)
       @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor])
       if @request.save
-        new_video_key = params[:videoKey] + "-" + @request.id.to_s
-        @request.update(video: new_video_key)
+        Request.update_video_key(@request, params[:videoKey])
         @signed_request = set_presigned_put_url(@request.video)
         render :json => { signedRequest: @signed_request, videoKey: @request.video }
       else
@@ -35,13 +34,13 @@ class RequestsController < ApplicationController
 
   def update
     if params[:transcodedVideo]
-      @transcoded_request = Request.find_by(video: params[:transcodedVideo])
-      @transcoded_request.update(transcoded: true)
+      @request = Request.find(request[:id])
+      Request.transcode(@request)
       render :status => :ok
-    elsif params[:reportVideo]
-      @report_request = Request.find(request[:id])
-      @report_request.increment(:reports)
-      @report_request.save
+    elsif params[:reportedVideo]
+      @request = Request.find(request[:id])
+      Request.report(@request)
+      Request.remove(@request)
       render :status => :ok
     else
       @request = Request.find(request[:id])
@@ -55,7 +54,7 @@ class RequestsController < ApplicationController
       elsif Request.donor_fraud(@user.id)
         render :status => 400, :json => { errorMessage: "Your last donations have not been received yet." }
       elsif @request.update(donor_id: @user.id)
-        @request_show = Request.show(@request.id)
+        @request_show = Request.show(@request)
         render :json => { request: @request_show }
       else
         render :status => 400, :json => { errorMessage: "Cannot donate at this time." }
@@ -74,9 +73,9 @@ class RequestsController < ApplicationController
   end
 
   private
-    def set_presigned_put_url(object_name)
+    def set_presigned_put_url(video)
       @s3 = Aws::S3::Resource.new
-      @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{object_name}")
+      @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{video}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
       # p "@put_url"
       # p @put_url
