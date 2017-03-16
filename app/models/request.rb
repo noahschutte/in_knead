@@ -68,25 +68,24 @@ class Request < ApplicationRecord
     }
   end
 
-  def self.show(request_id)
-    request = Request.find(request_id)
-    anon_email = User.find(request.creator_id).current_email
-    seconds = (Time.now() - request.created_at).round
+  def self.show(@request)
+    anon_email = User.find(@request.creator_id).current_email
+    seconds = (Time.now() - @request.created_at).round
     {
-      id: request.id,
+      id: @request.id,
       type: "request",
-      creatorId: request.creator_id,
+      creatorId: @request.creator_id,
       anonEmail: anon_email,
-      pizzas: request.pizzas,
-      vendor: request.vendor,
-      compressedVideo: get_compressed_url(request.video),
-      thumbnail: get_thumbnail_url(request.video),
-      donorId: request.donor_id,
+      pizzas: @request.pizzas,
+      vendor: @request.vendor,
+      compressedVideo: get_compressed_url(@request.video),
+      thumbnail: get_thumbnail_url(@request.video),
+      donorId: @request.donor_id,
       seconds: seconds,
-      status: request.status,
-      reports: request.reports,
-      createdAt: request.created_at,
-      updatedAt: request.updated_at
+      status: @request.status,
+      reports: @request.reports,
+      createdAt: @request.created_at,
+      updatedAt: @request.updated_at
     }
   end
 
@@ -105,8 +104,28 @@ class Request < ApplicationRecord
     }
   end
 
+  def self.transcode(@request)
+    @request.update(transcoded: true)
+  end
+
+  def self.report(@request)
+    @request.increment(:reports)
+    @request.save
+  end
+
+  def self.remove(@request)
+    if @request.reports > 3
+      @request.update(transcoded: false)
+    end
+  end
+
+  def self.update_video_key(@request, video_key)
+    new_video_key = video_key + "-" + @request.id.to_s
+    @request.update(video: new_video_key)
+  end
+
   private
-    def self.get_compressed_url(video)
+    def get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
       # p "@url"
@@ -116,7 +135,7 @@ class Request < ApplicationRecord
       # @url
     end
 
-    def self.get_thumbnail_url(video)
+    def get_thumbnail_url(video)
       @asset = S3_REQUESTS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
       # p "@url"

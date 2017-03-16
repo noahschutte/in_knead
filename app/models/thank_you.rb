@@ -71,8 +71,32 @@ class ThankYou < ApplicationRecord
     }
   end
 
+  def self.transcode(@thank_you)
+    @thank_you.update(transcoded: true)
+  end
+
+  def self.report(@thank_you)
+    @thank_you.increment(:reports)
+    @thank_you.save
+  end
+
+  def self.remove(@thank_you)
+    if @thank_you.reports > 3
+      @thank_you.update(transcoded: false)
+    end
+  end
+
+  def self.view(@thank_you)
+    @thank_you.update(donor_viewed: true)
+  end
+
+  def self.update_video_key(@thank_you, video_key)
+    new_video_key = params[:videoKey] + "-" + @thank_you.id.to_s
+    @thank_you.update(video: new_video_key)
+  end
+
   private
-    def self.get_compressed_url(video)
+    def get_compressed_url(video)
       @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
       # p "@url"
@@ -82,7 +106,7 @@ class ThankYou < ApplicationRecord
       # @url
     end
 
-    def self.get_thumbnail_url(video)
+    def get_thumbnail_url(video)
       @asset = S3_THANKYOUS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
       # p "@url"
