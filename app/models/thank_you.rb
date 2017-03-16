@@ -71,28 +71,28 @@ class ThankYou < ApplicationRecord
     }
   end
 
-  def self.transcode(@thank_you)
-    @thank_you.update(transcoded: true)
+  def self.transcode(thank_you)
+    thank_you.update(transcoded: true)
   end
 
-  def self.report(@thank_you)
-    @thank_you.increment(:reports)
-    @thank_you.save
+  def self.report(thank_you)
+    thank_you.increment(:reports)
+    thank_you.save
   end
 
-  def self.remove(@thank_you)
-    if @thank_you.reports > 3
-      @thank_you.update(transcoded: false)
+  def self.remove(thank_you)
+    if thank_you.reports > 3
+      thank_you.update(transcoded: false)
     end
   end
 
-  def self.view(@thank_you)
-    @thank_you.update(donor_viewed: true)
+  def self.view(thank_you)
+    thank_you.update(donor_viewed: true)
   end
 
-  def self.update_video_key(@thank_you, video_key)
-    new_video_key = params[:videoKey] + "-" + @thank_you.id.to_s
-    @thank_you.update(video: new_video_key)
+  def self.update_video_key(thank_you, video_key)
+    new_video_key = params[:videoKey] + "-" + thank_you.id.to_s
+    thank_you.update(video: new_video_key)
   end
 
   private
