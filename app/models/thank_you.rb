@@ -96,7 +96,7 @@ class ThankYou < ApplicationRecord
   end
 
   private
-    def get_compressed_url(video)
+    def self.get_compressed_url(video)
       @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")
       @url = @asset.presigned_url(:get)
       # p "@url"
@@ -106,7 +106,7 @@ class ThankYou < ApplicationRecord
       # @url
     end
 
-    def get_thumbnail_url(video)
+    def self.get_thumbnail_url(video)
       @asset = S3_THANKYOUS_THUMBNAILS.object("transcoded/#{video}-00001.png")
       @url = @asset.presigned_url(:get)
       # p "@url"
