@@ -5,6 +5,9 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.string :signup_email, null: false
       t.string :current_email
       t.integer :rating, default: 0
+      t.integer :reported_requests, array: true, default: []
+      t.integer :reported_thank_yous, array: true, default: []
+      t.integer :blocked, array: true, default: []
 
       t.timestamps null: false
     end

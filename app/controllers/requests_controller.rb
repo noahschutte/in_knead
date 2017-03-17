@@ -33,17 +33,16 @@ class RequestsController < ApplicationController
   end
 
   def update
+    @request = Request.find(request[:id])
     if params[:transcodedVideo]
-      @request = Request.find(request[:id])
       Request.transcode(@request)
       render :status => :ok
     elsif params[:reportedVideo]
-      @request = Request.find(request[:id])
       Request.report(@request)
+      User.report_request(params[:userID], @request.id)
       Request.remove(@request)
       render :status => :ok
     else
-      @request = Request.find(request[:id])
       @user = User.find(params[:userID])
       if params[:receivedDonation] && @request.update(status: "received")
         render :status => :ok

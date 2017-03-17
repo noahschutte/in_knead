@@ -13,17 +13,16 @@ class ThankYouController < ApplicationController
   end
 
   def update
+    @thank_you = ThankYou.find(request[:id])
     if params[:transcodedVideo]
-      @thank_you = ThankYou.find(request[:id])
       ThankYou.transcode(@thank_you)
       render :status => :ok
     elsif params[:reportedVideo]
-      @thank_you = ThankYou.find(request[:id])
-      ThankYou.report(@request)
+      ThankYou.report(@thank_you)
+      User.report_thank_you(params[:userID], @thank_you.id)
       ThankYou.remove(@thank_you)
       render :status => :ok
     elsif params[:viewedVideo]
-      @thank_you = ThankYou.find(request[:id])
       ThankYou.view(@thank_you)
       render :status => :ok
     end
