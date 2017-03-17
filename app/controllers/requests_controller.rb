@@ -34,10 +34,13 @@ class RequestsController < ApplicationController
 
   def update
     @request = Request.find(request[:id])
-    if params[:transcodedVideo]
+    if params[:blockUser]
+      User.block(params[:userID], params[:blockUser])
+    end
+    if params[:transcodeVideo]
       Request.transcode(@request)
       render :status => :ok
-    elsif params[:reportedVideo]
+    elsif params[:reportVideo]
       Request.report(@request)
       User.report_request(params[:userID], @request.id)
       Request.remove(@request)
