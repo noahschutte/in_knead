@@ -102,6 +102,12 @@ class User < ApplicationRecord
     @user.save
   end
 
+  def self.block(user_id, block_user_id)
+    @user = User.find(user_id)
+    @user.blocked << block_user_id
+    @user.save
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")
