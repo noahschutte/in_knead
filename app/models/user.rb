@@ -90,6 +90,18 @@ class User < ApplicationRecord
     ThankYou.where(donor_id: user_id).where(donor_viewed: false).where(transcoded: true)
   end
 
+  def self.report_request(user_id, request_id)
+    @user = User.find(user_id)
+    @user.reported_requests << request_id
+    @user.save
+  end
+
+  def self.report_thank_you(user_id, thank_you_id)
+    @user = User.find(user_id)
+    @user.reported_thank_yous << thank_you_id
+    @user.save
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")
