@@ -13,7 +13,9 @@ class RequestsController < ApplicationController
 
   def create
     @user = User.find(params[:userID])
-    if User.thank_you_reminders(@user.id).any?
+    if User.banned(@user.id)
+      render :status => 400, :json => { errorMessage: "You have been banned for innapropriate content." }
+    elsif User.thank_you_reminders(@user.id).any?
       render :status => 400, :json => { errorMessage: "Please submit a thank you video for your previously successful requests." }
     elsif User.recent_successful_request(@user.id)
       render :status => 400, :json => { errorMessage: "You must wait 14 days after receiving a donation." }
