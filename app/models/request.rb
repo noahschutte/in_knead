@@ -27,7 +27,7 @@ class Request < ApplicationRecord
   end
 
   def self.user_history(user_id)
-    Request.where(transcoded: true).where(creator_id: user_id).or(Request.where(transcoded: true).where(donor_id: user_id)).map { |request|
+    Request.where(transcoded: true, creator_id: user_id).or(Request.where(transcoded: true, donor_id: user_id)).map { |request|
       seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
@@ -48,7 +48,7 @@ class Request < ApplicationRecord
   end
 
   def self.anon_history(anon_id)
-    Request.where(transcoded: true).where(creator_id: anon_id).or(Request.where(transcoded: true).where(donor_id: anon_id)).map { |request|
+    Request.where(transcoded: true, creator_id: anon_id).or(Request.where(transcoded: true, donor_id: anon_id)).map { |request|
       seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
@@ -94,11 +94,11 @@ class Request < ApplicationRecord
   end
 
   def self.donor_fraud(user_id)
-    Request.where(donor_id: user_id).where(status: "active").count > 1 ? true : false
+    Request.where(donor_id: user_id, status: "active").count > 1 ? true : false
   end
 
   def self.expire(user_id)
-    Request.where(creator_id: user_id).where(status: "active").map{ |request|
+    Request.where(creator_id: user_id, status: "active").map{ |request|
       request.status = "expired"
       request.save
     }
@@ -115,7 +115,7 @@ class Request < ApplicationRecord
 
   def self.remove(request)
     if request.reports > 3
-      request.update(transcoded: false)
+      request.update(removed: true)
     end
   end
 

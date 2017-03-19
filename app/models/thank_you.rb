@@ -28,7 +28,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.user_history(user_id)
-    ThankYou.where(transcoded: true).where(creator_id: user_id).or(ThankYou.where(transcoded: true).where(donor_id: user_id)).map { |thank_you|
+    ThankYou.where(transcoded: true, creator_id: user_id).or(ThankYou.where(transcoded: true, donor_id: user_id)).map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
@@ -50,7 +50,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.anon_history(anon_id)
-    ThankYou.where(transcoded: true).where(creator_id: anon_id).or(ThankYou.where(transcoded: true).where(donor_id: anon_id)).map { |thank_you|
+    ThankYou.where(transcoded: true, creator_id: anon_id).or(ThankYou.where(transcoded: true, donor_id: anon_id)).map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
@@ -82,7 +82,7 @@ class ThankYou < ApplicationRecord
 
   def self.remove(thank_you)
     if thank_you.reports > 3
-      thank_you.update(transcoded: false)
+      thank_you.update(removed: false)
     end
   end
 
