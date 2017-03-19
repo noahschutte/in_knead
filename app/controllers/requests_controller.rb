@@ -14,7 +14,7 @@ class RequestsController < ApplicationController
   def create
     @user = User.find(params[:userID])
     if User.banned(@user.id)
-      render :status => 400, :json => { errorMessage: "You have been banned for innapropriate content." }
+      render :status => 400, :json => { errorMessage: "You have been banned for inappropriate content." }
     elsif User.thank_you_reminders(@user.id).any?
       render :status => 400, :json => { errorMessage: "Please submit a thank you video for your previously successful requests." }
     elsif User.recent_successful_request(@user.id)
