@@ -48,7 +48,7 @@ class User < ApplicationRecord
     }
   end
 
-  # Requests you've received but have not sent a Thank You for
+  # Donations you've received but have not sent a Thank You for
   def self.thank_you_reminders(user_id)
     requests = Request.where(creator: user_id, status: "received")
     thank_yous = ThankYou.where(creator: user_id)
