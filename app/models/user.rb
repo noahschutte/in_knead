@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :thank_yous, class_name: "ThankYou", foreign_key: :creator_id
 
   def self.recent_request(user_id)
-    Request.where(creator: user_id, "created_at > ?", DateTime.now - 1.days)[0]
+    Request.where(creator: user_id).where("created_at > ?", DateTime.now - 1.days)[0]
   end
 
   def self.recent_successful_request(user_id)
