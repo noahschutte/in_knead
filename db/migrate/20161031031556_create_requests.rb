@@ -6,9 +6,10 @@ class CreateRequests < ActiveRecord::Migration[5.0]
       t.string :vendor, null: false
       t.string :video
       t.integer :donor_id
+      t.boolean :transcoded, default: false
       t.string :status, default: "active"
       t.integer :reports, default: 0
-      t.boolean :transcoded, default: false
+      t.boolean :removed, default: false
 
       t.timestamps null: false
     end

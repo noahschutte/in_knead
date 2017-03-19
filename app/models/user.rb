@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :thank_yous, class_name: "ThankYou", foreign_key: :creator_id
 
   def self.recent_request(user_id)
-    Request.where(creator: user_id).where("created_at > ?", DateTime.now - 1.days)[0]
+    Request.where(creator: user_id, "created_at > ?", DateTime.now - 1.days)[0]
   end
 
   def self.recent_successful_request(user_id)
@@ -50,7 +50,7 @@ class User < ApplicationRecord
 
   # Requests you've received but have not sent a Thank You for
   def self.thank_you_reminders(user_id)
-    requests = Request.where(creator: user_id).where(status: "received")
+    requests = Request.where(creator: user_id, status: "received")
     thank_yous = ThankYou.where(creator: user_id)
     collection = []
     requests.each { |request|
@@ -69,8 +69,8 @@ class User < ApplicationRecord
 
   # Requests you donated to that do not have a Thank You
   def self.awaiting_thank_yous(user_id)
-    requests = Request.where(donor_id: user_id).where(status: "received")
-    thank_yous = ThankYou.where(donor_id: user_id).where(donor_viewed: false)
+    requests = Request.where(donor_id: user_id, status: "received")
+    thank_yous = ThankYou.where(donor_id: user_id, donor_viewed: false)
     collection = []
     requests.each { |request|
       match = false
@@ -87,7 +87,7 @@ class User < ApplicationRecord
   end
 
   def self.received_thank_yous(user_id)
-    ThankYou.where(donor_id: user_id).where(donor_viewed: false).where(transcoded: true)
+    ThankYou.where(donor_id: user_id, donor_viewed: false, transcoded: true)
   end
 
   def self.report_request(user_id, request_id)
