@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20161031032341) do
     t.boolean  "transcoded", default: false
     t.string   "status",     default: "active"
     t.integer  "reports",    default: 0
-    t.boolean  "removed",    default: false
+    t.boolean  "removed"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.index ["creator_id"], name: "index_requests_on_creator_id", using: :btree
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20161031032341) do
     t.boolean  "transcoded",   default: false
     t.boolean  "donor_viewed", default: false
     t.integer  "reports",      default: 0
-    t.boolean  "removed",      default: false
+    t.boolean  "removed"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.index ["creator_id"], name: "index_thank_yous_on_creator_id", using: :btree

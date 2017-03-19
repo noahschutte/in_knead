@@ -9,7 +9,7 @@ class CreateRequests < ActiveRecord::Migration[5.0]
       t.boolean :transcoded, default: false
       t.string :status, default: "active"
       t.integer :reports, default: 0
-      t.boolean :removed, default: false
+      t.boolean :removed
 
       t.timestamps null: false
     end

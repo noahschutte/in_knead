@@ -6,7 +6,7 @@ class ThankYou < ApplicationRecord
   belongs_to :request, class_name: "Request", foreign_key: :request_id
 
   def self.activity
-    ThankYou.where(transcoded: true).map { |thank_you|
+    ThankYou.where(removed: false, transcoded: true).map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
@@ -28,7 +28,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.user_history(user_id)
-    ThankYou.where(transcoded: true, creator_id: user_id).or(ThankYou.where(transcoded: true, donor_id: user_id)).map { |thank_you|
+    ThankYou.where(creator_id: user_id, removed: false, transcoded: true).or(ThankYou.where(donor_id: user_id, removed: false, transcoded: true)).map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
@@ -50,7 +50,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.anon_history(anon_id)
-    ThankYou.where(transcoded: true, creator_id: anon_id).or(ThankYou.where(transcoded: true, donor_id: anon_id)).map { |thank_you|
+    ThankYou.where(creator_id: anon_id, removed: false, transcoded: true).or(ThankYou.where(donor_id: anon_id, removed: false, transcoded: true)).map { |thank_you|
       seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
