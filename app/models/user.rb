@@ -108,6 +108,12 @@ class User < ApplicationRecord
     @user.save
   end
 
+  def self.banned(user_id)
+    requests = Request.where(creator: user_id, removed: true).count
+    thank_yous = ThankYou.where(creator: user_id, removed: true).count
+    requests + thank_yous > 1 ? true : false
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")
