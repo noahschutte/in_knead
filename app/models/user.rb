@@ -3,7 +3,7 @@ class User < ApplicationRecord
   validates_presence_of :fb_userID
   validates_uniqueness_of :fb_userID
   validates_format_of :signup_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
-  validates_format_of :current_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :update
+  validates_format_of :current_email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :update, :allow_blank => true
 
   has_many :requests, class_name: "Request", foreign_key: :creator_id
   has_many :thank_yous, class_name: "ThankYou", foreign_key: :creator_id
@@ -105,9 +105,7 @@ class User < ApplicationRecord
   def self.block(user_id, block_user_id)
     @user = User.find(user_id)
     @user.blocked << block_user_id
-    p "user blocked"
-    p @user.blocked
-    @user.save!
+    @user.save
   end
 
   def self.banned(user_id)
