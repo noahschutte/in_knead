@@ -25,10 +25,10 @@ class UsersController < ApplicationController
     @user = User.find_by(fb_userID: @fb_userID)
     if !@user
       @user = User.new(fb_userID: @fb_userID, signup_email: @email)
-      if !@user.save
-        render :status => 400, :json => { errorMessage: "User could not be created in database." }
-      else
+      if @user.save
         render :json => { user: @user }
+      else
+        render :status => 400, :json => { errorMessage: "User could not be created in database." }
       end
     else
       render :json => { user: @user }
