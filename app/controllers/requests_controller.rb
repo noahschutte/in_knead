@@ -38,8 +38,8 @@ class RequestsController < ApplicationController
     @request = Request.find(request[:id])
     if params[:blockUser]
       User.block(params[:userID], params[:blockUser])
-    end
-    if params[:transcodeVideo]
+      render :status => :ok
+    elsif params[:transcodeVideo]
       Request.transcode(@request)
       render :status => :ok
     elsif params[:reportVideo]
