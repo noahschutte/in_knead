@@ -105,7 +105,9 @@ class User < ApplicationRecord
   def self.block(user_id, block_user_id)
     @user = User.find(user_id)
     @user.blocked << block_user_id
-    @user.save
+    p "user blocked"
+    p @user.blocked
+    @user.save!
   end
 
   def self.banned(user_id)
