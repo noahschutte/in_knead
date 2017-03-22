@@ -37,7 +37,7 @@ class RequestsController < ApplicationController
   def update
     @request = Request.find(request[:id])
     if params[:blockUser]
-      User.block(params[:userID], params[:blockUser])
+      User.block!(params[:userID], params[:blockUser])
       render :status => :ok
     elsif params[:transcodeVideo]
       Request.transcode(@request)
