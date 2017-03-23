@@ -20,9 +20,20 @@ class User < ApplicationRecord
     Request.where(creator_id: user_id).where.not(donor_id: nil).where(status: "active")
   end
 
-  # This fails if Request was reported, causing the updated_at to change
-  def self.recent_donation(user_id)
-    Request.where(donor_id: user_id).where.not(status: "received").where("updated_at > ?", DateTime.now - 30.minutes)[0]
+  # Has the user reported this request?
+  def self.reported_request(user, request)
+    user.reported_requests.map { |reported_request|
+      return true if reported_request == request.id
+    }
+    return false
+  end
+
+  # Has the user blocked this request's creator?
+  def self.blocked_user(user, request)
+    user.blocked.map { |blocked_user|
+      return true if blocked_user == request.creator.id
+    }
+    return false
   end
 
   def self.recent_donations(user_id)
