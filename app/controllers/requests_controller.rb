@@ -51,8 +51,10 @@ class RequestsController < ApplicationController
       @user = User.find(params[:userID])
       if params[:receivedDonation] && @request.update(status: "received")
         render :status => :ok
-      elsif User.recent_donation(@user.id)
-        render :status => 400, :json => { errorMessage: "You have recently made a donation." }
+      elsif User.reported_request(@user, @request)
+        render :status => 400, :json => { errorMessage: "You can't donate to a video that you've reported." }
+      elsif User.blocked_user(@user, @request)
+        render :status => 400, :json => { errorMessage: "You can't donate to a user that you've blocked." }
       elsif @request.donor_id != nil
         render :status => 400, :json => { errorMessage: "This request has already received a donation." }
       elsif Request.donor_fraud(@user.id)
