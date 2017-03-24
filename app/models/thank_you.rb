@@ -104,6 +104,11 @@ class ThankYou < ApplicationRecord
     }
   end
 
+  def self.failed_upload(user_id)
+    thank_you = ThankYou.where(creator: user_id, transcoded: false).where("created_at < ?", DateTime.now - 3.minutes)[0]
+    thank_you.destroy
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")
