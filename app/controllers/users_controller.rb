@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(request[:id])
     @user_id = @user.id
+    ThankYou.failed_upload(@user_id)
     @recent_successful_requests = User.recent_successful_requests(@user_id)
     @thank_you_reminders = User.thank_you_reminders(@user_id)
     @recent_donations = User.recent_donations(@user_id)
