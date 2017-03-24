@@ -5,6 +5,8 @@ class ThankYouController < ApplicationController
     @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor])
     if @thank_you.save
       ThankYou.update_video_key(@thank_you, params[:videoKey])
+      # Change ThankYou.viewed to true on creation if the donor has blocked the ThankYou creator
+      ThankYou.donor_blocked(@thank_you)
       @signed_request = set_presigned_put_url(@thank_you.video)
       render :json => { signedRequest: @signed_request, videoKey: @thank_you.video }
     else

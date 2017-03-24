@@ -95,6 +95,15 @@ class ThankYou < ApplicationRecord
     thank_you.update(video: new_video_key)
   end
 
+  # Change ThankYou.viewed to true on creation if the donor has blocked the ThankYou creator
+  def self.donor_blocked(thank_you)
+    User.find(thank_you.donor_id).blocked.map { |blocked_user|
+      if blocked_user == thank_you.creator_id
+        thank_you.update(donor_viewed: true)
+      end
+    }
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")
