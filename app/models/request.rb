@@ -129,8 +129,12 @@ class Request < ApplicationRecord
   end
 
   def self.failed_upload(user_id)
-    request = Request.where(creator: user_id, transcoded: false).where("created_at < ?", DateTime.now - 3.minutes)[0]
-    request.destroy
+    requests = Request.where(creator: user_id, transcoded: false).where("created_at < ?", DateTime.now - 3.minutes)
+    if requests[0]
+      requests.map { |request|
+        request.destroy
+      }
+    end
   end
 
   private
