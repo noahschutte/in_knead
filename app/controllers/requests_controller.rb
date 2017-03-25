@@ -39,6 +39,9 @@ class RequestsController < ApplicationController
 
   def update
     @request = Request.find(request[:id])
+    if !@request
+      render :status => 400, :json => { errorMessage: "This request no longer exists." }
+    end
     if params[:blockUser]
       User.block(params[:userID], params[:blockUser])
       render :status => :ok
