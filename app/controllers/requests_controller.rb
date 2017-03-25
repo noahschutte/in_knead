@@ -39,25 +39,25 @@ class RequestsController < ApplicationController
 
   def update
     @request = Request.find(request[:id])
-    if !@request
-      render :status => 400, :json => { errorMessage: "This request no longer exists." }
-    end
-    if params[:blockUser]
-      User.block(params[:userID], params[:blockUser])
-      render :status => :ok
-    elsif params[:transcodeVideo]
+    if params[:transcodeVideo]
       Request.transcode(@request)
       render :status => :ok
     elsif params[:reportVideo]
-      Request.report(@request)
       User.report_request(params[:userID], @request.id)
+      Request.report(@request)
       Request.remove(@request)
+      render :status => :ok
+    elsif params[:blockUser]
+      User.block(params[:userID], params[:blockUser])
+      Request.report(@request)
+      Request.remove(@request)
+      render :status => :ok
+    elsif params[:receivedDonation]
+      Request.received_donation(@request)
       render :status => :ok
     else
       @user = User.find(params[:userID])
-      if params[:receivedDonation] && @request.update(status: "received")
-        render :status => :ok
-      elsif User.reported_request(@user, @request)
+      if User.reported_request(@user, @request)
         render :status => 400, :json => { errorMessage: "You can't donate to a video that you've reported." }
       elsif User.blocked_user(@user, @request)
         render :status => 400, :json => { errorMessage: "You can't donate to a user that you've blocked." }
@@ -65,11 +65,12 @@ class RequestsController < ApplicationController
         render :status => 400, :json => { errorMessage: "This request has already received a donation." }
       elsif Request.donor_fraud(@user.id)
         render :status => 400, :json => { errorMessage: "Your last donations have not been received yet." }
-      elsif @request.update(donor_id: @user.id)
+      elsif @request.status == "deleted"
+        render :status => 400, :json => { errorMessage: "This request no longer exists." }
+      else
+        Request.donate(@request, @user.id)
         @request_show = Request.show(@request)
         render :json => { request: @request_show }
-      else
-        render :status => 400, :json => { errorMessage: "Cannot donate at this time." }
       end
     end
   end
@@ -77,8 +78,8 @@ class RequestsController < ApplicationController
   def destroy
     @request = Request.find(request[:id])
     if @request.status == "active" && @request.donor_id == nil
-      @request.destroy
-      render :status => :ok
+      Request.delete(@request)
+      render :status => :ok, :json => { errorMessage: "Request was successfully deleted." }
     else
       render :status => 400, :json => { errorMessage: "Request could not be deleted." }
     end

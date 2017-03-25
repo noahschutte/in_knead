@@ -29,7 +29,7 @@ class UsersController < ApplicationController
       if @user.save
         render :json => { user: @user }
       else
-        render :status => 400, :json => { errorMessage: "User could not be created in database." }
+        render :status => 400, :json => { errorMessage: "User could not be logged in." }
       end
     else
       render :json => { user: @user }
