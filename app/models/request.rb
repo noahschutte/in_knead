@@ -125,7 +125,7 @@ class Request < ApplicationRecord
   end
 
   def self.recent_upload(user_id)
-    Request.where(creator: user_id).where("created_at > ?", DateTime.now - 3.minutes)[0]
+    Request.where(creator: user_id, transcoded: false).where("created_at > ?", DateTime.now - 3.minutes)[0]
   end
 
   def self.failed_upload(user_id)
