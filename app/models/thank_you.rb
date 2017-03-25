@@ -105,7 +105,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.failed_upload(user_id)
-    thank_yous = ThankYou.where(creator: user_id, transcoded: false).where("created_at < ?", DateTime.now - 3.minutes)[0]
+    thank_yous = ThankYou.where(creator: user_id, transcoded: false).where("created_at < ?", DateTime.now - 3.minutes)
     if thank_yous[0]
       thank_yous.map { |thank_you|
         thank_you.destroy
