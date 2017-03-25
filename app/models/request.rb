@@ -6,7 +6,7 @@ class Request < ApplicationRecord
   has_one :thank_you, class_name: "ThankYou", foreign_key: :request_id
 
   def self.activity
-    Request.where(removed: false, transcoded: true).map { |request|
+    Request.where(removed: false, transcoded: true).where.not(status: "deleted").map { |request|
       seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
@@ -27,7 +27,7 @@ class Request < ApplicationRecord
   end
 
   def self.user_history(user_id)
-    Request.where(creator_id: user_id, removed: false, transcoded: true).or(Request.where(donor_id: user_id, removed: false, transcoded: true)).map { |request|
+    Request.where(creator_id: user_id, removed: false, transcoded: true).where.not(status: "deleted").or(Request.where(donor_id: user_id, removed: false, transcoded: true).where.not(status: "deleted")).map { |request|
       seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
@@ -48,7 +48,7 @@ class Request < ApplicationRecord
   end
 
   def self.anon_history(anon_id)
-    Request.where(creator_id: anon_id, removed: false, transcoded: true).or(Request.where(donor_id: anon_id, removed: false, transcoded: true)).map { |request|
+    Request.where(creator_id: anon_id, removed: false, transcoded: true).where.not(status: "deleted").or(Request.where(donor_id: anon_id, removed: false, transcoded: true).where.not(status: "deleted")).map { |request|
       seconds = (Time.now() - request.created_at).round
       {
         id: request.id,
@@ -132,9 +132,21 @@ class Request < ApplicationRecord
     requests = Request.where(creator: user_id, transcoded: false).where("created_at < ?", DateTime.now - 3.minutes)
     if requests[0]
       requests.map { |request|
-        request.destroy
+        request.update(status: "deleted")
       }
     end
+  end
+
+  def self.received_donation(request)
+    request.update(status: "received")
+  end
+
+  def self.donate(request, user_id)
+    request.update(donor_id: user_id)
+  end
+
+  def self.delete(request)
+    request.update(status: "deleted")
   end
 
   private

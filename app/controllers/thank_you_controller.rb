@@ -16,30 +16,29 @@ class ThankYouController < ApplicationController
 
   def update
     @thank_you = ThankYou.find(request[:id])
-    if params[:blockUser]
-      User.block(params[:userID], params[:blockUser])
-    end
     if params[:transcodeVideo]
       ThankYou.transcode(@thank_you)
       render :status => :ok
-    elsif params[:reportVideo]
-      ThankYou.report(@thank_you)
-      User.report_thank_you(params[:userID], @thank_you.id)
-      ThankYou.remove(@thank_you)
-      render :status => :ok
     elsif params[:viewedVideo]
       ThankYou.view(@thank_you)
+      render :status => :ok
+    elsif params[:reportVideo]
+      User.report_thank_you(params[:userID], @thank_you.id)
+      ThankYou.report(@thank_you)
+      ThankYou.remove(@thank_you)
+      render :status => :ok
+    elsif params[:blockUser]
+      User.block(params[:userID], params[:blockUser])
+      ThankYou.report(@thank_you)
+      ThankYou.remove(@thank_you)
       render :status => :ok
     end
   end
 
   def destroy
     @thank_you = ThankYou.find(request[:id])
-    if @thank_you.destroy
-      render :status => :ok
-    else
-      render :status => 400, :json => { errorMessage: "Thank You entry could not be deleted." }
-    end
+    ThankYou.delete(@thank_you)
+    render :status => :ok
   end
 
   private
