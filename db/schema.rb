@@ -36,18 +36,19 @@ ActiveRecord::Schema.define(version: 20161031032341) do
   end
 
   create_table "thank_yous", force: :cascade do |t|
-    t.integer  "creator_id",                   null: false
-    t.integer  "request_id",                   null: false
-    t.integer  "donor_id",                     null: false
-    t.integer  "pizzas",                       null: false
-    t.string   "vendor",                       null: false
+    t.integer  "creator_id",                      null: false
+    t.integer  "request_id",                      null: false
+    t.integer  "donor_id",                        null: false
+    t.integer  "pizzas",                          null: false
+    t.string   "vendor",                          null: false
     t.string   "video"
     t.boolean  "transcoded",   default: false
+    t.string   "status",       default: "active"
     t.boolean  "donor_viewed", default: false
     t.integer  "reports",      default: 0
     t.boolean  "removed",      default: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.index ["creator_id"], name: "index_thank_yous_on_creator_id", using: :btree
     t.index ["request_id"], name: "index_thank_yous_on_request_id", using: :btree
   end

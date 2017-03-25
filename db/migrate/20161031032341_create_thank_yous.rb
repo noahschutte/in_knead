@@ -8,6 +8,7 @@ class CreateThankYous < ActiveRecord::Migration[5.0]
       t.string :vendor, null: false
       t.string :video
       t.boolean :transcoded, default: false
+      t.string :status, default: "active"
       t.boolean :donor_viewed, default: false
       t.integer :reports, default: 0
       t.boolean :removed, default: false
