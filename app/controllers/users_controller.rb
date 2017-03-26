@@ -43,6 +43,7 @@ class UsersController < ApplicationController
         render :status => :ok
       else
         render :status => 400, :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
+      end
     elsif params[:acceptEULA]
       User.accept_eula(@user)
       render :status => :ok
