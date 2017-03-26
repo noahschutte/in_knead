@@ -125,6 +125,10 @@ class User < ApplicationRecord
     requests + thank_yous > 1 ? true : false
   end
 
+  def self.update_email(user, updated_email)
+    user.update(current_email: updated_email)
+  end
+
   def self.accept_eula(user)
     user.update(eula_accepted: true)
   end
