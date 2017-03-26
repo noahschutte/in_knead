@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
       t.integer :reported_requests, array: true, default: []
       t.integer :reported_thank_yous, array: true, default: []
       t.integer :blocked, array: true, default: []
+      t.boolean :eula_accepted, default: false
 
       t.timestamps null: false
     end

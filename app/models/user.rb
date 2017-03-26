@@ -125,6 +125,10 @@ class User < ApplicationRecord
     requests + thank_yous > 1 ? true : false
   end
 
+  def self.accept_eula(user)
+    user.update(eula_accepted: true)
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")

@@ -38,10 +38,14 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(request[:id])
-    if @user.update(current_email: params[:updatedEmail])
-      render :status => :ok
+    if params[:updatedEmail]
+      if User.update_email(params[:updatedEmail])
+        render :status => :ok
+      else
+        render :status => 400, :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
     else
-      render :status => 400, :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
+      User.accept_eula(@user)
+      render :status => :ok
     end
   end
 
