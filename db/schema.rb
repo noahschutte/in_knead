@@ -54,15 +54,16 @@ ActiveRecord::Schema.define(version: 20161031032341) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.bigint   "fb_userID",                        null: false
-    t.string   "signup_email",                     null: false
+    t.bigint   "fb_userID",                           null: false
+    t.string   "signup_email",                        null: false
     t.string   "current_email"
     t.integer  "rating",              default: 0
-    t.integer  "reported_requests",   default: [],              array: true
-    t.integer  "reported_thank_yous", default: [],              array: true
-    t.integer  "blocked",             default: [],              array: true
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.integer  "reported_requests",   default: [],                 array: true
+    t.integer  "reported_thank_yous", default: [],                 array: true
+    t.integer  "blocked",             default: [],                 array: true
+    t.boolean  "eula_accepted",       default: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
   end
 
 end
