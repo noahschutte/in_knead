@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     @awaiting_thank_yous = User.awaiting_thank_yous(@user_id)
     @received_thank_yous = User.received_thank_yous(@user_id)
     render :json => {
+      eulaAccepted: @user.eula_accepted,
       currentEmail: @user.current_email,
       signupEmail: @user.signup_email,
       recentSuccessfulRequests: @recent_successful_requests,
