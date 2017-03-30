@@ -117,6 +117,14 @@ class ThankYou < ApplicationRecord
     @thank_you.update(status: "deleted")
   end
 
+  def self.new_removal(user_id)
+    ThankYou.where(creator: user_id, removed: true, removal_viewed: false)
+  end
+
+  def self.removal_viewed(thank_you)
+    thank_you.update(removal_viewed: true)
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_THANKYOUS_COMPRESSED.object("transcoded/#{video}.mp4")

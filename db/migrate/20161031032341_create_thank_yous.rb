@@ -12,6 +12,7 @@ class CreateThankYous < ActiveRecord::Migration[5.0]
       t.boolean :donor_viewed, default: false
       t.integer :reports, default: 0
       t.boolean :removed, default: false
+      t.boolean :removal_viewed, default: false
 
       t.timestamps null: false
     end

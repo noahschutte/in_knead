@@ -9,6 +9,8 @@ class UsersController < ApplicationController
     @recent_donations = User.recent_donations(@user_id)
     @awaiting_thank_yous = User.awaiting_thank_yous(@user_id)
     @received_thank_yous = User.received_thank_yous(@user_id)
+    @removed_requests = Request.new_removal(@user_id)
+    @removed_thank_yous = ThankYou.new_removal(@user_id)
     render :json => {
       eulaAccepted: @user.eula_accepted,
       currentEmail: @user.current_email,
@@ -17,7 +19,9 @@ class UsersController < ApplicationController
       thankYouReminders: @thank_you_reminders,
       recentDonations: @recent_donations,
       awaitingThankYous: @awaiting_thank_yous,
-      receivedThankYous: @received_thank_yous
+      receivedThankYous: @received_thank_yous,
+      removedRequests: @removed_requests,
+      removedThankYous: @removed_thank_yous
     }
   end
 
