@@ -1,10 +1,10 @@
 class ThankYouController < ApplicationController
 
   def create
-    @user = User.find(params[:userID])
-    @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor])
+    @user = User.find(thank_you_params[:userID])
+    @thank_you = ThankYou.new(creator: @user, donor_id: thank_you_params[:donor_id], request_id: thank_you_params[:requestId], pizzas: thank_you_params[:pizzas], vendor: thank_you_params[:vendor])
     if @thank_you.save
-      ThankYou.update_video_key(@thank_you, params[:videoKey])
+      ThankYou.update_video_key(@thank_you, thank_you_params[:videoKey])
       # Change ThankYou.viewed to true on creation if the donor has blocked the ThankYou creator
       ThankYou.donor_blocked(@thank_you)
       @signed_request = set_presigned_put_url(@thank_you.video)
@@ -15,23 +15,23 @@ class ThankYouController < ApplicationController
   end
 
   def update
-    @thank_you = ThankYou.find(request[:id])
-    if params[:transcodeVideo]
+    @thank_you = ThankYou.find(thank_you_update_params[:id])
+    if thank_you_update_params[:transcodeVideo]
       ThankYou.transcode(@thank_you)
       render :status => :ok
-    elsif params[:viewedVideo]
+    elsif thank_you_update_params[:viewedVideo]
       ThankYou.view(@thank_you)
       render :status => :ok
-    elsif params[:removalViewed]
+    elsif thank_you_update_params[:removalViewed]
       ThankYou.removal_viewed(@thank_you)
       render :status => :ok
-    elsif params[:reportVideo]
-      User.report_thank_you(params[:userID], @thank_you.id)
+    elsif thank_you_update_params[:reportVideo]
+      User.report_thank_you(thank_you_update_params[:userID], @thank_you.id)
       ThankYou.report(@thank_you)
       ThankYou.remove(@thank_you)
       render :status => :ok
-    elsif params[:blockUser]
-      User.block(params[:userID], params[:blockUser])
+    elsif thank_you_update_params[:blockUser]
+      User.block(thank_you_update_params[:userID], thank_you_update_params[:blockUser])
       ThankYou.report(@thank_you)
       ThankYou.remove(@thank_you)
       render :status => :ok
@@ -54,6 +54,14 @@ class ThankYouController < ApplicationController
       # p "sub"
       # p @put_url.sub('in-knead-thankyous.s3.amazonaws.com', "d244yzatrec2va.cloudfront.net")
       # @put_url
+    end
+
+    def thank_you_params
+      params.permit(:userID, :donor_id, :requestId, :pizzas, :vendor, :videoKey, {:thank_you => [:pizzas, :vendor, :donor_id]})
+    end
+
+    def thank_you_update_params
+      params.permit(:id, :transcodeVideo, :viewedVideo, :removalViewed, :reportVideo, :blockUser, :userID)
     end
 
 end

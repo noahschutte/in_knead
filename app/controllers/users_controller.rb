@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   def show
-    @user = User.find(request[:id])
+    @user = User.find(user_id_params[:id])
     @user_id = @user.id
     ThankYou.failed_upload(@user_id)
     @recent_successful_requests = User.recent_successful_requests(@user_id)
@@ -26,8 +26,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    @email = params[:userInfo][:email]
-    @fb_userID = params[:userInfo][:id]
+    @email = user_params[:email]
+    @fb_userID = user_params[:id]
     @user = User.find_by(fb_userID: @fb_userID)
     if !@user
       @user = User.new(fb_userID: @fb_userID, signup_email: @email)
@@ -42,17 +42,30 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(request[:id])
-    if params[:updatedEmail]
-      if User.update_email(@user, params[:updatedEmail])
+    @user = User.find(user_update_params[:id])
+    if user_update_params[:updatedEmail]
+      if User.update_email(@user, user_update_params[:updatedEmail])
         render :status => :ok
       else
         render :status => 400, :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
       end
-    elsif params[:acceptEULA]
+    elsif user_update_params[:acceptEULA]
       User.accept_eula(@user)
       render :status => :ok
     end
   end
+
+  private
+    def user_id_params
+      params.permit(:id, user: {})
+    end
+
+    def user_params
+      params.require(:userInfo).permit(:id, :email, :name, :first_name, :last_name, user: {})
+    end
+
+    def user_update_params
+      params.permit(:id, :updatedEmail, :acceptEULA, user: {})
+    end
 
 end

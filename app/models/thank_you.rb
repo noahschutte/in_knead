@@ -91,7 +91,7 @@ class ThankYou < ApplicationRecord
   end
 
   def self.update_video_key(thank_you, video_key)
-    new_video_key = params[:videoKey] + "-" + thank_you.id.to_s
+    new_video_key = video_key + "-" + thank_you.id.to_s
     thank_you.update(video: new_video_key)
   end
 
