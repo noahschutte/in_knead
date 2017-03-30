@@ -26,7 +26,7 @@ class RequestsController < ApplicationController
       render :status => 400, :json => { errorMessage: "You can only make a request once every 24 hours." }
     else
       Request.expire(@user.id)
-      @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor])
+      @request = Request.new(request_params)
       if @request.save
         Request.update_video_key(@request, params[:videoKey])
         @signed_request = set_presigned_put_url(@request.video)
@@ -38,7 +38,7 @@ class RequestsController < ApplicationController
   end
 
   def update
-    @request = Request.find(request[:id])
+    @request = Request.find(params[:id])
     if params[:transcodeVideo]
       Request.transcode(@request)
       render :status => :ok
@@ -76,7 +76,7 @@ class RequestsController < ApplicationController
   end
 
   def destroy
-    @request = Request.find(request[:id])
+    @request = Request.find(params[:id])
     if @request.status == "active" && @request.donor_id == nil
       Request.delete(@request)
       render :status => :ok, :json => { errorMessage: "Request was successfully deleted." }
@@ -95,6 +95,10 @@ class RequestsController < ApplicationController
       # p "sub"
       # p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
       # @put_url
+    end
+
+    def request_params
+      params.require(:creator, :pizzas, :vendor)
     end
 
 end
