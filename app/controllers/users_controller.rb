@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   def show
-    @user = User.find(request[:id])
+    @user = User.find(params[:id])
     @user_id = @user.id
     ThankYou.failed_upload(@user_id)
     @recent_successful_requests = User.recent_successful_requests(@user_id)
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     @fb_userID = params[:userInfo][:id]
     @user = User.find_by(fb_userID: @fb_userID)
     if !@user
-      @user = User.new(fb_userID: @fb_userID, signup_email: @email)
+      @user = User.new(user_params)
       if @user.save
         render :json => { user: @user }
       else
@@ -42,7 +42,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(request[:id])
+    @user = User.find(params[:id])
     if params[:updatedEmail]
       if User.update_email(@user, params[:updatedEmail])
         render :status => :ok
@@ -54,5 +54,10 @@ class UsersController < ApplicationController
       render :status => :ok
     end
   end
+
+  private
+    def user_params
+      params.require(:fb_userID, :signup_email)
+    end
 
 end

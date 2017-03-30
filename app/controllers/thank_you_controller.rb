@@ -2,7 +2,7 @@ class ThankYouController < ApplicationController
 
   def create
     @user = User.find(params[:userID])
-    @thank_you = ThankYou.new(creator: @user, donor_id: params[:donor_id], request_id: params[:requestId], pizzas: params[:pizzas], vendor: params[:vendor])
+    @thank_you = ThankYou.new(thank_you_params)
     if @thank_you.save
       ThankYou.update_video_key(@thank_you, params[:videoKey])
       # Change ThankYou.viewed to true on creation if the donor has blocked the ThankYou creator
@@ -15,7 +15,7 @@ class ThankYouController < ApplicationController
   end
 
   def update
-    @thank_you = ThankYou.find(request[:id])
+    @thank_you = ThankYou.find(params[:id])
     if params[:transcodeVideo]
       ThankYou.transcode(@thank_you)
       render :status => :ok
@@ -39,7 +39,7 @@ class ThankYouController < ApplicationController
   end
 
   def destroy
-    @thank_you = ThankYou.find(request[:id])
+    @thank_you = ThankYou.find(params[:id])
     ThankYou.delete(@thank_you)
     render :status => :ok
   end
@@ -54,6 +54,10 @@ class ThankYouController < ApplicationController
       # p "sub"
       # p @put_url.sub('in-knead-thankyous.s3.amazonaws.com', "d244yzatrec2va.cloudfront.net")
       # @put_url
+    end
+
+    def thank_you_params
+      params.require(:creator, :donor_id, :request_id, :pizzas, :vendor)
     end
 
 end
