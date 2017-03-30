@@ -12,7 +12,7 @@ class RequestsController < ApplicationController
   end
 
   def create
-    @user = User.find(params[:userID])
+    @user = User.find(request_params[:userID])
     Request.failed_upload(@user.id)
     if User.banned(@user.id)
       render :status => 400, :json => { errorMessage: "You have been banned for inappropriate content." }
@@ -26,9 +26,9 @@ class RequestsController < ApplicationController
       render :status => 400, :json => { errorMessage: "You can only make a request once every 24 hours." }
     else
       Request.expire(@user.id)
-      @request = Request.new(creator: @user, pizzas: params[:pizzas], vendor: params[:vendor])
+      @request = Request.new(creator: @user, pizzas: request_params[:pizzas], vendor: request_params[:vendor])
       if @request.save
-        Request.update_video_key(@request, params[:videoKey])
+        Request.update_video_key(@request, request_params[:videoKey])
         @signed_request = set_presigned_put_url(@request.video)
         render :json => { signedRequest: @signed_request, videoKey: @request.video }
       else
@@ -38,28 +38,28 @@ class RequestsController < ApplicationController
   end
 
   def update
-    @request = Request.find(request[:id])
-    if params[:transcodeVideo]
+    @request = Request.find(request_update_params[:id])
+    if request_update_params[:transcodeVideo]
       Request.transcode(@request)
       render :status => :ok
-    elsif params[:reportVideo]
-      User.report_request(params[:userID], @request.id)
+    elsif request_update_params[:reportVideo]
+      User.report_request(request_update_params[:userID], @request.id)
       Request.report(@request)
       Request.remove(@request)
       render :status => :ok
-    elsif params[:blockUser]
-      User.block(params[:userID], params[:blockUser])
+    elsif request_update_params[:blockUser]
+      User.block(request_update_params[:userID], request_update_params[:blockUser])
       Request.report(@request)
       Request.remove(@request)
       render :status => :ok
-    elsif params[:receivedDonation]
+    elsif request_update_params[:receivedDonation]
       Request.received_donation(@request)
       render :status => :ok
-    elsif params[:removalViewed]
+    elsif request_update_params[:removalViewed]
       Request.removal_viewed(@request)
       render :status => :ok
     else
-      @user = User.find(params[:userID])
+      @user = User.find(request_update_params[:userID])
       if User.reported_request(@user, @request)
         render :status => 400, :json => { errorMessage: "You can't donate to a video that you've reported." }
       elsif User.blocked_user(@user, @request)
@@ -98,6 +98,14 @@ class RequestsController < ApplicationController
       # p "sub"
       # p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
       # @put_url
+    end
+
+    def request_params
+      params.permit(:userID, :pizzas, :vendor, :videoKey, {:request => [:pizzas, :vendor]})
+    end
+
+    def request_update_params
+      params.permit(:id, :transcodeVideo, :reportVideo, :userID, :blockUser, :receivedDonation, :removalViewed, user: {}, request: {})
     end
 
 end
