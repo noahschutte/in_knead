@@ -55,6 +55,9 @@ class RequestsController < ApplicationController
     elsif params[:receivedDonation]
       Request.received_donation(@request)
       render :status => :ok
+    elsif params[:removalViewed]
+      Request.removal_viewed(@request)
+      render :status => :ok
     else
       @user = User.find(params[:userID])
       if User.reported_request(@user, @request)

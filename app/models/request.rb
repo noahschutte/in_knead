@@ -149,6 +149,14 @@ class Request < ApplicationRecord
     request.update(status: "deleted")
   end
 
+  def self.new_removal(user_id)
+    Request.where(creator: user_id, removed: true, removal_viewed: false)
+  end
+
+  def self.removal_viewed(request)
+    request.update(removal_viewed: true)
+  end
+
   private
     def self.get_compressed_url(video)
       @asset = S3_REQUESTS_COMPRESSED.object("transcoded/#{video}.mp4")

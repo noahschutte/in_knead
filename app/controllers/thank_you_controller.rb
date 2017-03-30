@@ -22,6 +22,9 @@ class ThankYouController < ApplicationController
     elsif params[:viewedVideo]
       ThankYou.view(@thank_you)
       render :status => :ok
+    elsif params[:removalViewed]
+      ThankYou.removal_viewed(@thank_you)
+      render :status => :ok
     elsif params[:reportVideo]
       User.report_thank_you(params[:userID], @thank_you.id)
       ThankYou.report(@thank_you)

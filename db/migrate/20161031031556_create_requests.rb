@@ -10,6 +10,7 @@ class CreateRequests < ActiveRecord::Migration[5.0]
       t.string :status, default: "active"
       t.integer :reports, default: 0
       t.boolean :removed, default: false
+      t.boolean :removal_viewed, default: false
 
       t.timestamps null: false
     end
