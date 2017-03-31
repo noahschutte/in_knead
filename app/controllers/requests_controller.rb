@@ -41,23 +41,18 @@ class RequestsController < ApplicationController
     @request = Request.find(request_update_params[:id])
     if request_update_params[:transcodeVideo]
       Request.transcode(@request)
-      render :status => :ok
     elsif request_update_params[:reportVideo]
       User.report_request(request_update_params[:userID], @request.id)
       Request.report(@request)
       Request.remove(@request)
-      render :status => :ok
     elsif request_update_params[:blockUser]
       User.block(request_update_params[:userID], request_update_params[:blockUser])
       Request.report(@request)
       Request.remove(@request)
-      render :status => :ok
     elsif request_update_params[:receivedDonation]
       Request.received_donation(@request)
-      render :status => :ok
     elsif request_update_params[:removalViewed]
       Request.removal_viewed(@request)
-      render :status => :ok
     else
       @user = User.find(request_update_params[:userID])
       if User.reported_request(@user, @request)
@@ -76,6 +71,7 @@ class RequestsController < ApplicationController
         render :json => { request: @request_show }
       end
     end
+    render :status => :ok
   end
 
   def destroy
@@ -93,11 +89,6 @@ class RequestsController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_REQUESTS']).object("#{video}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      # p "@put_url"
-      # p @put_url
-      # p "sub"
-      # p @put_url.sub('in-knead-requests.s3.amazonaws.com', "d1ow1u7708l5qk.cloudfront.net")
-      # @put_url
     end
 
     def request_params

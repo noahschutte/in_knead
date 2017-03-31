@@ -29,31 +29,33 @@ class UsersController < ApplicationController
     @email = user_params[:email]
     @fb_userID = user_params[:id]
     @user = User.find_by(fb_userID: @fb_userID)
-    if !@user
+    unless @user
       @user = User.new(fb_userID: @fb_userID, signup_email: @email)
-      if @user.save
-        render :json => { user: @user }
-      else
+      unless @user.save
         render :status => 400, :json => { errorMessage: "User could not be logged in." }
       end
-    else
-      render :json => { user: @user }
     end
+    # session[:user_id] = @user.id
+    render :json => { user: @user }
   end
 
   def update
     @user = User.find(user_update_params[:id])
     if user_update_params[:updatedEmail]
-      if User.update_email(@user, user_update_params[:updatedEmail])
-        render :status => :ok
-      else
+      unless User.update_email(@user, user_update_params[:updatedEmail])
         render :status => 400, :json => { errorMessage: "Your email was not updated.\nPlease enter a valid email address." }
       end
     elsif user_update_params[:acceptEULA]
       User.accept_eula(@user)
-      render :status => :ok
     end
+    render :status => :ok
   end
+
+  # def destroy
+  #   @user = User.find(user_update_params[:id])
+  #   session.clear
+  #   render :status => :ok
+  # end
 
   private
     def user_id_params
