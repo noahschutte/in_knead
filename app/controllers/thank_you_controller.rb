@@ -18,24 +18,20 @@ class ThankYouController < ApplicationController
     @thank_you = ThankYou.find(thank_you_update_params[:id])
     if thank_you_update_params[:transcodeVideo]
       ThankYou.transcode(@thank_you)
-      render :status => :ok
     elsif thank_you_update_params[:viewedVideo]
       ThankYou.view(@thank_you)
-      render :status => :ok
     elsif thank_you_update_params[:removalViewed]
       ThankYou.removal_viewed(@thank_you)
-      render :status => :ok
     elsif thank_you_update_params[:reportVideo]
       User.report_thank_you(thank_you_update_params[:userID], @thank_you.id)
       ThankYou.report(@thank_you)
       ThankYou.remove(@thank_you)
-      render :status => :ok
     elsif thank_you_update_params[:blockUser]
       User.block(thank_you_update_params[:userID], thank_you_update_params[:blockUser])
       ThankYou.report(@thank_you)
       ThankYou.remove(@thank_you)
-      render :status => :ok
     end
+    render :status => :ok
   end
 
   def destroy
@@ -49,11 +45,6 @@ class ThankYouController < ApplicationController
       @s3 = Aws::S3::Resource.new
       @object = @s3.bucket(ENV['S3_THANKYOUS']).object("#{video}")
       @put_url = @object.presigned_url(:put, acl: 'public-read', expires_in: 60)
-      # p "@put_url"
-      # p @put_url
-      # p "sub"
-      # p @put_url.sub('in-knead-thankyous.s3.amazonaws.com', "d244yzatrec2va.cloudfront.net")
-      # @put_url
     end
 
     def thank_you_params
