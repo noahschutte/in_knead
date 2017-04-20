@@ -135,11 +135,11 @@ class User < ApplicationRecord
 
   private
     def self.get_compressed_url(video)
-      @url = "https://s3.amazonaws.com/in-knead-requests-compressed/transcoded/#{video}.mp4"
+      @url = "https://d11afr9krw05ex.cloudfront.net/transcoded/#{video}.mp4"
     end
 
     def self.get_thumbnail_url(video)
-      @url = "https://s3.amazonaws.com/in-knead-requests-thumbnails/transcoded/#{video}-00001.png"
+      @url = "https://d2ed940i9bzi4l.cloudfront.net/transcoded/#{video}-00001.png"
     end
 
 end
