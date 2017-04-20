@@ -127,10 +127,10 @@ class ThankYou < ApplicationRecord
 
   private
     def self.get_compressed_url(video)
-      @url = "https://s3.amazonaws.com/in-knead-thankyous-compressed/transcoded/#{video}.mp4"
+      @url = "https://d2ldogngkzp5pi.cloudfront.net/transcoded/#{video}.mp4"
     end
 
     def self.get_thumbnail_url(video)
-      @url = "https://s3.amazonaws.com/in-knead-thankyous-thumbnails/transcoded/#{video}-00001.png"
+      @url = "https://d34vf9lcht8rtn.cloudfront.net/transcoded/#{video}-00001.png"
     end
 end
