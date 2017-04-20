@@ -139,7 +139,7 @@ class User < ApplicationRecord
     end
 
     def self.get_thumbnail_url(video)
-      @url = "https://d2ed940i9bzi4l.cloudfront.net/transcoded/#{video}-00001.png"
+      @url = "https://d9g4qmis3ihu8.cloudfront.net/transcoded/#{video}-00001.png"
     end
 
 end
