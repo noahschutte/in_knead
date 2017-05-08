@@ -70,6 +70,8 @@ class Request < ApplicationRecord
 
   def self.show(request)
     anon_email = User.find(request.creator_id).current_email
+    p "anon_email"
+    p anon_email
     seconds = (Time.now() - request.created_at).round
     {
       id: request.id,

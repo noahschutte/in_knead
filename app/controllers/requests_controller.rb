@@ -38,12 +38,6 @@ class RequestsController < ApplicationController
   end
 
   def update
-    p "params id"
-    p params[:id]
-    p "params"
-    p params
-    p "request_update_params"
-    p request_update_params
     @request = Request.find(request_update_params[:id])
     if request_update_params[:transcodeVideo]
       Request.transcode(@request)
@@ -72,8 +66,11 @@ class RequestsController < ApplicationController
       elsif @request.status == "deleted"
         render :status => 400, :json => { errorMessage: "This request no longer exists." }
       else
+        p "update request with donation"
         Request.donate(@request, @user.id)
         @request_show = Request.show(@request)
+        p "@request_show"
+        p @request_show
         render :json => { request: @request_show }
       end
     end
@@ -81,6 +78,7 @@ class RequestsController < ApplicationController
   end
 
   def destroy
+    p "Am i here?"
     @request = Request.find(request[:id])
     if @request.status == "active" && @request.donor_id == nil
       Request.delete(@request)
