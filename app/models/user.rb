@@ -81,7 +81,7 @@ class User < ApplicationRecord
   # Requests you donated to that do not have a Thank You
   def self.awaiting_thank_yous(user_id)
     requests = Request.where(donor_id: user_id, status: "received")
-    thank_yous = ThankYou.where(donor_id: user_id, donor_viewed: false)
+    thank_yous = ThankYou.where(donor_id: user_id)
     collection = []
     requests.each { |request|
       match = false
