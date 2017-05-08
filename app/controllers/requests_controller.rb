@@ -66,19 +66,14 @@ class RequestsController < ApplicationController
       elsif @request.status == "deleted"
         render :status => 400, :json => { errorMessage: "This request no longer exists." }
       else
-        p "update request with donation"
         Request.donate(@request, @user.id)
         @request_show = Request.show(@request)
-        p "@request_show"
-        p @request_show
         render :json => { request: @request_show }
       end
     end
-    render :status => :ok
   end
 
   def destroy
-    p "Am i here?"
     @request = Request.find(request[:id])
     if @request.status == "active" && @request.donor_id == nil
       Request.delete(@request)
