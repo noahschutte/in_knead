@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @thank_you_reminders = User.thank_you_reminders(@user_id)
     @recent_donations = User.recent_donations(@user_id)
     @awaiting_thank_yous = User.awaiting_thank_yous(@user_id)
-    @received_thank_yous = User.received_thank_yous(@user_id)
+    @received_thank_yous = ThankYou.received_thank_yous(@user_id)
     @removed_requests = Request.new_removal(@user_id)
     @removed_thank_yous = ThankYou.new_removal(@user_id)
     render :json => {

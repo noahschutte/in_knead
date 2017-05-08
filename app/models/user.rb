@@ -97,29 +97,6 @@ class User < ApplicationRecord
     return collection
   end
 
-  def self.received_thank_yous(user_id)
-    ThankYou.where(donor_id: user_id, donor_viewed: false, transcoded: true, removed: false).where.not(status: "deleted").map { |thank_you|
-      seconds = (Time.now() - thank_you.created_at).round
-      {
-        id: thank_you.id,
-        type: "thankYou",
-        seconds: seconds,
-        requestId: thank_you.request_id,
-        creatorId: thank_you.creator_id,
-        pizzas: thank_you.pizzas,
-        vendor: thank_you.vendor,
-        compressedVideo: get_compressed_url(thank_you.video),
-        thumbnail: get_thumbnail_url(thank_you.video),
-        donorId: thank_you.donor_id,
-        reports: thank_you.reports,
-        donorViewed: thank_you.donor_viewed,
-        status: thank_you.status,
-        createdAt: thank_you.created_at,
-        updatedAt: thank_you.updated_at
-      }
-    }
-  end
-
   def self.report_request(user_id, request_id)
     @user = User.find(user_id)
     @user.reported_requests << request_id
