@@ -82,7 +82,7 @@ class ThankYou < ApplicationRecord
 
   def self.remove(thank_you)
     if thank_you.reports > 3
-      thank_you.update(removed: false)
+      thank_you.update(removed: true)
     end
   end
 
