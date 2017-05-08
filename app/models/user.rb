@@ -99,9 +99,11 @@ class User < ApplicationRecord
 
   def self.received_thank_yous(user_id)
     ThankYou.where(donor_id: user_id, donor_viewed: false, transcoded: true, removed: false).where.not(status: "deleted").map { |thank_you|
+      seconds = (Time.now() - thank_you.created_at).round
       {
         id: thank_you.id,
         type: "thankYou",
+        seconds: seconds,
         requestId: thank_you.request_id,
         creatorId: thank_you.creator_id,
         pizzas: thank_you.pizzas,
