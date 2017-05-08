@@ -38,6 +38,12 @@ class RequestsController < ApplicationController
   end
 
   def update
+    p "params id"
+    p params[:id]
+    p "params"
+    p params
+    p "request_update_params"
+    p request_update_params
     @request = Request.find(request_update_params[:id])
     if request_update_params[:transcodeVideo]
       Request.transcode(@request)
