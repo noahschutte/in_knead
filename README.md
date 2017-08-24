@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/noahschutte/in_knead.png)](https://travis-ci.org/noahschutte/in_knead)
 
 ## Our Vision
-To bring people together through pizza.
+Microphilanthropizza - To bring people together through pizza.
 
 ## Visionaries
 
