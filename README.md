@@ -4,6 +4,9 @@
 ## Our Vision
 Microphilanthropizza - To bring people together through pizza.
 
+## Front End Repository
+https://github.com/noahschutte/inKneadApp
+
 ## Visionaries
 
 #### Jameson Welling
