@@ -159,10 +159,10 @@ class Request < ApplicationRecord
 
   private
     def self.get_compressed_url(video)
-      @url = "https://d11afr9krw05ex.cloudfront.net/transcoded/#{video}.mp4"
+      @url = "https://#{ENV['CF_REQUEST_COMPRESSED']}/transcoded/#{video}.mp4"
     end
 
     def self.get_thumbnail_url(video)
-      @url = "https://d9g4qmis3ihu8.cloudfront.net/transcoded/#{video}-00001.png"
+      @url = "https://#{ENV['CF_REQUEST_THUMBNAIL']}/transcoded/#{video}-00001.png"
     end
 end
