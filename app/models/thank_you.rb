@@ -150,10 +150,10 @@ class ThankYou < ApplicationRecord
 
   private
     def self.get_compressed_url(video)
-      @url = "https://d20amu93rv56hd.cloudfront.net/transcoded/#{video}.mp4"
+      @url = "https://#{ENV['CF_THANKYOUS_COMPRESSED']}/transcoded/#{video}.mp4"
     end
 
     def self.get_thumbnail_url(video)
-      @url = "https://ds2aobouksoje.cloudfront.net/transcoded/#{video}-00001.png"
+      @url = "https://#{ENV['CF_THANKYOUS_THUMBNAILS']}/transcoded/#{video}-00001.png"
     end
 end
