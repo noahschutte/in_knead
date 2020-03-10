@@ -28,11 +28,10 @@ class RequestsController < ApplicationController
       Request.expire(@user.id)
       @request = Request.new(creator: @user, pizzas: request_params[:pizzas], vendor: request_params[:vendor])
       if @request.save
-        puts "step 1"
         Request.update_video_key(@request, request_params[:videoKey])
-        puts "step 2"
         @signed_request = set_presigned_put_url(@request.video)
-        puts "step 3"
+        puts "signed request:"
+        puts @signed_request
         render :status => :ok, :json => { signedRequest: @signed_request, videoKey: @request.video }
       else
         render :status => 400, :json => { errorMessage: "Request could not be created." }
