@@ -30,7 +30,7 @@ class RequestsController < ApplicationController
       if @request.save
         Request.update_video_key(@request, request_params[:videoKey])
         @signed_request = set_presigned_put_url(@request.video)
-        render :json => { signedRequest: @signed_request, videoKey: @request.video }
+        render :status => :ok, :json => { signedRequest: @signed_request, videoKey: @request.video }
       else
         render :status => 400, :json => { errorMessage: "Request could not be created." }
       end
